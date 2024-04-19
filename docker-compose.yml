@@ -9,6 +9,8 @@ services:
       - .env
     restart: on-failure
     network_mode: host
+    depends_on:
+      - redis
 
   web:
     extends:
@@ -19,3 +21,17 @@ services:
     extends:
       service: common
     command: poetry run python manage.py bot
+
+#  celery:
+#    extends:
+#      service: common
+#    command: poetry run python -m celery -A config worker -l INFO
+#
+#  celery-beat:
+#    extends:
+#      service: common
+#    command: poetry run python -m celery -A config beat -l INFO
+
+  redis:
+    image: redis:6
+    restart: on-failure

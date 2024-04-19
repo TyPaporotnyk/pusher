@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -54,10 +55,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -132,11 +130,42 @@ LOGGING = {
     },
 }
 
+# Telegram bot creds
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_BOT_THREAD_COUNT = int(os.environ.get("TELEGRAM_BOT_THREAD_COUNT"))
 
+# External db creds
 DB_EXTERNAL_NAME = os.environ.get("DB_EXTERNAL_NAME")
 DB_EXTERNAL_USER = os.environ.get("DB_EXTERNAL_USER")
 DB_EXTERNAL_PASSWORD = os.environ.get("DB_EXTERNAL_PASSWORD")
 DB_EXTERNAL_HOST = os.environ.get("DB_EXTERNAL_HOST")
 DB_EXTERNAL_PORT = os.environ.get("DB_EXTERNAL_PORT")
+
+# Redis creds
+REDIS_HOST = os.environ.get("REDIS_HOST")
+REDIS_PORT = os.environ.get("REDIS_PORT")
+REDIS_DB = os.environ.get("REDIS_DB")
+REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+
+# Celery setting
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_TIMEZONE = "Europe/Kiev"
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BEAT_SCHEDULE = {
+    "bot_broadcast_groups_task": {
+        "task": "apps.bot.tasks.broadcast_group_task",
+        "schedule": timedelta(minutes=5),
+    },
+    # "bot_broadcast_keywords_task": {
+    #     "task": "apps.bot.tasks.broadcast_keyword_task",
+    #     "schedule": timedelta(minutes=30),
+    # },
+}
