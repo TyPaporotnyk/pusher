@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  common:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: on-failure
+    network_mode: host
+
+  web:
+    extends:
+      service: common
+    command: poetry run python manage.py runserver 0.0.0.0:8080
+
+  bot:
+    extends:
+      service: common
+    command: poetry run python manage.py bot

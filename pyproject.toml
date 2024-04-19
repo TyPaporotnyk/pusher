@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "pusher"
+version = "0.1.0"
+description = ""
+authors = ["Daniil <daniil.svadkovsky@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.4"
+mysqlclient = "^2.2.4"
+python-dotenv = "^1.0.1"
+pytelegrambotapi = "^4.17.0"
+mysql = "^0.0.3"
+mysql-connector-python = "^8.3.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+black = "^24.4.0"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+pre-commit = "^3.7.0"
+pytest-django = "^4.8.0"
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.project.settings.local"
+
+
+[tool.black]
+line-length = 119
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 119
+skip = ["migrations/"]
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
