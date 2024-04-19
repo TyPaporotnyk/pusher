@@ -8,7 +8,6 @@ from apps.bot.utils.text import get_advert_text
 from apps.customers.services.customers import CustomerService
 from apps.customers.services.real_estate import RealEstateService
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -25,8 +24,7 @@ def broadcast_group(bot: TeleBot):
     new_group_adverts.reverse()
     new_group_adverts = new_group_adverts[0:50]
 
-    logger.info(f"New group adverts: {len(new_group_adverts)}")
-    print(f"New group adverts: {len(new_group_adverts)}")
+    logger.info(f"New group adverts received: {len(new_group_adverts)}")
     send_count = 0
     for group_advert in new_group_adverts:
         advert_group_name = group_advert[5]
@@ -42,8 +40,19 @@ def broadcast_group(bot: TeleBot):
         # Получаем юзеров для рассылки
         users = customer_service.get_all_by_group(advert_group_name)
         for user in users:
+            # Проверка на наличие группы в выбранных у юзера
             if advert in user.real_estates.all():
                 continue
+
+            # Проверка на наличие выбранных ключевых слов юзера в сообщении объявления
+            user_groups_keywords = user.groups_keywords.all()
+            if user_groups_keywords:
+                groups_keywords_in_advert_message = any(
+                    [user_groups_keyword.name in advert_message for user_groups_keyword in user_groups_keywords]
+                )
+
+                if not groups_keywords_in_advert_message:
+                    continue
 
             try:
                 send_message(bot, user.telegram_id, message_template, images)
@@ -53,8 +62,10 @@ def broadcast_group(bot: TeleBot):
                 # Добавляем недвижимость к юзеру
                 user.real_estates.add(advert)
                 user.save()
-                send_count += 1
+
                 logger.debug(f"Broadcasting advert to user {user.telegram_id} success")
+
+        send_count += 1
     logger.info(f"Success send count: {send_count}")
 
 
