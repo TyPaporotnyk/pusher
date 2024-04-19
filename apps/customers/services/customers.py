@@ -6,7 +6,7 @@ from apps.customers.models.customers import Customer
 class BaseCustomerService(ABC):
     @staticmethod
     @abstractmethod
-    def get(username: str, password: str) -> Customer:
+    def get(**filter) -> Customer:
         raise NotImplementedError
 
     @staticmethod
@@ -31,5 +31,5 @@ class CustomerService(BaseCustomerService):
         return Customer.objects.filter(is_active=True).filter(keywords__name=keyword).all()
 
     @staticmethod
-    def get(username: str, password: str) -> Customer:
-        return Customer.objects.filter(username=username, password=password).first()
+    def get(**filter) -> Customer:
+        return Customer.objects.filter(**filter).first()

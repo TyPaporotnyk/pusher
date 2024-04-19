@@ -7,6 +7,7 @@ from telebot import StateMemoryStorage, TeleBot, custom_filters
 from apps.bot.states import LoginState
 from apps.bot.utils.broadcast import broadcast_group
 from apps.customers.exceptions import CustomerIsAllReadyRegistered, CustomerIsNotRegistered
+from apps.customers.services.customers import CustomerService
 from apps.customers.utils import login
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -21,20 +22,21 @@ bot = TeleBot(
 )
 
 
-@bot.message_handler(commands=["start"])
-def start_handler(message):
-    bot.send_message(message.chat.id, "Привет, нажми /login чтобы войти в аккаунт")
-
-
 @bot.message_handler(commands=["test"])
 def test_handler(message):
     broadcast_group(bot)
 
 
-@bot.message_handler(commands=["login"])
-def login_handler(message):
-    bot.set_state(message.from_user.id, LoginState.username, message.chat.id)
-    bot.send_message(message.chat.id, "Привет, напиши свой username")
+@bot.message_handler(commands=["start"])
+def start_handler(message):
+    customer_service = CustomerService()
+    customer = customer_service.get(telegram_id=message.chat.id)
+
+    if customer:
+        bot.send_message(message.chat.id, "Привет, вы уже вошли в аккаунт")
+    else:
+        bot.set_state(message.from_user.id, LoginState.username, message.chat.id)
+        bot.send_message(message.chat.id, "Привет, напиши свой username")
 
 
 @bot.message_handler(state=LoginState.username)

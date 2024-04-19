@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
+from django.core.exceptions import ValidationError
 
 from apps.customers.models.categories import Category
 from apps.customers.models.customers import Customer
@@ -27,8 +28,8 @@ class CustomerAdminForm(forms.ModelForm):
     )
     groups_keywords = forms.ModelMultipleChoiceField(
         queryset=GroupKeyword.objects.all(),
-        label="Groups",
-        widget=widgets.FilteredSelectMultiple("GroupKeywordS", is_stacked=False),
+        label="GroupKeywords",
+        widget=widgets.FilteredSelectMultiple("GroupKeywords", is_stacked=False),
         required=False,
     )
     keywords = forms.ModelMultipleChoiceField(
@@ -38,13 +39,19 @@ class CustomerAdminForm(forms.ModelForm):
         required=False,
     )
 
-    def __init__(self, *args, **kwargs):
-        super(CustomerAdminForm, self).__init__(*args, **kwargs)
+    def clean(self):
+        max_pack = self.cleaned_data["max_pack"]
 
-        if self.instance and self.instance.pk:
-            self.fields["groups"].initial = self.instance.groups.all()
-            self.fields["keywords"].initial = self.instance.keywords.all()
-            self.fields["groups_keywords"].initial = self.instance.groups_keywords.all()
+        if len(self.cleaned_data["groups"]) > max_pack:
+            raise ValidationError({"groups": "Количество выбранных элементов больше, чем значение в поле max_pack."})
+
+        if len(self.cleaned_data["groups_keywords"]) > max_pack:
+            raise ValidationError(
+                {"groups_keywords": "Количество выбранных элементов больше, чем значение в поле max_pack."}
+            )
+
+        if len(self.cleaned_data["keywords"]) > max_pack:
+            raise ValidationError({"keywords": "Количество выбранных элементов больше, чем значение в поле max_pack."})
 
 
 @admin.register(Customer)
