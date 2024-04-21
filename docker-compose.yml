@@ -20,19 +20,19 @@ services:
       service: common
     command: poetry run python manage.py bot
 
-#  celery:
-#    extends:
-#      service: common
-#    command: poetry run python -m celery -A config worker -l INFO
-#    depends_on:
-#      - redis
-#
-#  celery-beat:
-#    extends:
-#      service: common
-#    command: poetry run python -m celery -A config beat -l INFO
-#    depends_on:
-#      - redis
+  celery:
+    extends:
+      service: common
+    command: poetry run python -m celery -A config worker -l INFO
+    depends_on:
+      - redis
+
+  celery-beat:
+    extends:
+      service: common
+    command: poetry run python -m celery -A config beat -l INFO
+    depends_on:
+      - redis
 
   redis:
     image: redis:6

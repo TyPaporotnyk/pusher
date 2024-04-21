@@ -5,7 +5,6 @@ from django.core.management.base import BaseCommand
 from telebot import StateMemoryStorage, TeleBot, custom_filters
 
 from apps.bot.states import LoginState
-from apps.bot.utils.broadcast import broadcast_group
 from apps.customers.exceptions import CustomerIsAllReadyRegistered, CustomerIsNotRegistered
 from apps.customers.services.customers import CustomerService
 from apps.customers.utils import login
@@ -20,11 +19,6 @@ bot = TeleBot(
     num_threads=settings.TELEGRAM_BOT_THREAD_COUNT,
     disable_web_page_preview=True,
 )
-
-
-@bot.message_handler(commands=["test"])
-def test_handler(message):
-    broadcast_group(bot)
 
 
 @bot.message_handler(commands=["start"])

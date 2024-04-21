@@ -162,7 +162,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     "bot_broadcast_groups_task": {
         "task": "apps.bot.tasks.broadcast_group_task",
-        "schedule": timedelta(minutes=5),
+        "schedule": timedelta(minutes=10),
     },
     # "bot_broadcast_keywords_task": {
     #     "task": "apps.bot.tasks.broadcast_keyword_task",
