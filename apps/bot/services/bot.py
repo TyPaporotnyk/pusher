@@ -27,4 +27,4 @@ class BotSenderService:
         return photo_ids
 
     def send(self, chat_id: int, message: str):
-        antiflood(self.bot.send_message, chat_id, number_retries=2, text=message[:4096])
+        antiflood(self.bot.send_message, chat_id, number_retries=2, text=message[:4096], parse_mode="HTML")

@@ -169,3 +169,7 @@ CELERY_BEAT_SCHEDULE = {
     #     "schedule": timedelta(minutes=30),
     # },
 }
+
+# Broadcaster settings
+MAX_POSTS_PER_TIME = int(os.environ.get("MAX_POSTS_PER_TIME"))
+MAX_IMAGES_PER_POST = int(os.environ.get("MAX_IMAGES_PER_POST"))

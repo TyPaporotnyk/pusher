@@ -1,3 +1,4 @@
+from apps.bot.texts import MESSAGE_LINK_TEXT
 from apps.bot.utils.ai import find_emails, find_phone_numbers
 
 
@@ -8,12 +9,12 @@ def get_advert_text(additional: str, advert_link: str) -> str:
     message = ""
 
     if phone_numbers:
-        message += f"<b>Phone numbers:</b> {','.join(phone_numbers)}\n\n"
+        message += f"{', '.join(phone_numbers)}\n\n"
 
     if emails:
-        message += f"<b>Emails:</b> {','.join(emails)}\n\n"
+        message += f"{', '.join(emails)}\n\n"
 
     message += f"{additional}\n\n"
-    message += advert_link
+    message += f"<a href='{advert_link}'>{MESSAGE_LINK_TEXT}</a>"
 
     return message

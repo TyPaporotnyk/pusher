@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from telebot import StateMemoryStorage, TeleBot, custom_filters
 
+from apps.bot import texts
 from apps.bot.states import LoginState
 from apps.customers.exceptions import CustomerIsAllReadyRegistered, CustomerIsNotRegistered
 from apps.customers.services.customers import CustomerService
@@ -27,15 +28,15 @@ def start_handler(message):
     customer = customer_service.get(telegram_id=message.chat.id)
 
     if customer:
-        bot.send_message(message.chat.id, "Привет, вы уже вошли в аккаунт")
+        bot.send_message(message.chat.id, texts.ALREADY_ACCOUNT_LOGIN)
     else:
         bot.set_state(message.from_user.id, LoginState.username, message.chat.id)
-        bot.send_message(message.chat.id, "Привет, напиши свой username")
+        bot.send_message(message.chat.id, texts.USERNAME_INPUT_TEXT)
 
 
 @bot.message_handler(state=LoginState.username)
 def get_username_handler(message):
-    bot.send_message(message.chat.id, "Теперь напиши свой password")
+    bot.send_message(message.chat.id, texts.PASSWORD_INPUT_TEXT)
     bot.set_state(message.from_user.id, LoginState.password, message.chat.id)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data["username"] = message.text
@@ -49,11 +50,11 @@ def get_password_handler(message):
         try:
             login(data["username"], password, message.from_user.id)
         except CustomerIsNotRegistered:
-            bot.send_message(message.chat.id, "Ошибка при входе в аккаунт")
+            bot.send_message(message.chat.id, texts.ERROR_ACCOUNT_LOGIN)
         except CustomerIsAllReadyRegistered:
-            bot.send_message(message.chat.id, "Вы уже вошли в аккаунт")
+            bot.send_message(message.chat.id, texts.ALREADY_ACCOUNT_LOGIN)
         else:
-            bot.send_message(message.chat.id, "Вы успешно вошли в ваш аккаунт")
+            bot.send_message(message.chat.id, texts.SUCCESS_ACCOUNT_LOGIN)
 
     bot.delete_state(message.from_user.id, message.chat.id)
 

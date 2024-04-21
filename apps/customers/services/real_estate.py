@@ -12,15 +12,16 @@ class BaseRealEstateService(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_last(website: str) -> RealEstate:
+    def get_last_id_by_tag(website: str) -> RealEstate:
         raise NotImplementedError
 
 
 class RealEstateService(BaseRealEstateService):
 
     @staticmethod
-    def get_last(website: str) -> RealEstate:
-        return RealEstate.objects.filter(website=website).order_by("-real_estate_id").first()
+    def get_last_id_by_tag(website: str) -> int:
+        instance = RealEstate.objects.filter(website=website).order_by("-real_estate_id").first()
+        return instance.real_estate_id if instance else 0
 
     @staticmethod
     def get_or_create(real_estate_id: int, website: str) -> RealEstate:

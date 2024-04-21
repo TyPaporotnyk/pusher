@@ -62,8 +62,13 @@ class CustomerAdmin(admin.ModelAdmin):
     form = CustomerAdminForm
 
 
+@admin.register(RealEstate)
+class RealEstateAdmin(admin.ModelAdmin):
+    list_display = ["real_estate_id", "website"]
+    ordering = ["-created_at"]
+
+
 admin.site.register(Category)
 admin.site.register(Group)
 admin.site.register(GroupKeyword)
 admin.site.register(Keyword)
-admin.site.register(RealEstate)

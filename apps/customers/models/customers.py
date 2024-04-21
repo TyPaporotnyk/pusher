@@ -20,6 +20,13 @@ class Customer(TimedBaseModel):
     groups_keywords = models.ManyToManyField(GroupKeyword, blank=True)
     keywords = models.ManyToManyField(Keyword, blank=True)
 
+    def is_advert_contains(self, advert: RealEstate) -> bool:
+        return advert in self.real_estates.all()
+
+    def add_advert(self, advert: RealEstate):
+        self.real_estates.add(advert)
+        self.save()
+
     @property
     def posts_received(self):
         return len(self.real_estates.all())
