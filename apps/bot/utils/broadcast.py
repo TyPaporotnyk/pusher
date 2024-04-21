@@ -27,7 +27,8 @@ def broadcast_group(bot: TeleBot):
     logger.info(f"New group adverts received: {len(new_group_adverts)}")
     send_count = 0
     for group_advert in new_group_adverts:
-        advert_group_name = group_advert[5]
+        # advert_group_name = group_advert[5]
+        advert_group_link = group_advert[6]
         images = group_advert[4].split(",")[:10]
         advert_message = group_advert[0]
         advert_id = group_advert[1]
@@ -38,7 +39,7 @@ def broadcast_group(bot: TeleBot):
         advert = real_estate_service.get_or_create(advert_id, "group")
 
         # Получаем юзеров для рассылки
-        users = customer_service.get_all_by_group(advert_group_name)
+        users = customer_service.get_all_by_group_url(advert_group_link)
         for user in users:
             # Проверка на наличие группы в выбранных у юзера
             if advert in user.real_estates.all():
