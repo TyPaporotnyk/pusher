@@ -15,6 +15,7 @@ class CustomerAdminForm(forms.ModelForm):
         fields = [
             "name",
             "username",
+            "email",
             "password",
             "max_pack",
         ]
@@ -42,7 +43,7 @@ class CustomerAdminForm(forms.ModelForm):
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     change_form_template = "admin/customers/customer/change_form.html"
-    list_display = ["name", "username", "posts_received"]
+    list_display = ["name", "username", "posts_received", "is_active"]
     readonly_fields = ["pk", "telegram_id", "registration_date", "posts_received"]
     search_fields = ["name", "username"]
     form = CustomerAdminForm
