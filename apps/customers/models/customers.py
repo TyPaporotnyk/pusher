@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.common.models import TimedBaseModel
-from apps.customers.models.groups import Group, GroupKeyword
+from apps.customers.models.groups import Group
 from apps.customers.models.keywords import Keyword
 from apps.customers.models.real_estate import RealEstate
 
@@ -17,8 +17,8 @@ class Customer(TimedBaseModel):
     real_estates = models.ManyToManyField(RealEstate, blank=True)
     telegram_id = models.BigIntegerField(blank=True, null=True)
     groups = models.ManyToManyField(Group, blank=True)
-    groups_keywords = models.ManyToManyField(GroupKeyword, blank=True)
-    keywords = models.ManyToManyField(Keyword, blank=True)
+    groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
+    keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
 
     def is_advert_contains(self, advert: RealEstate) -> bool:
         return advert in self.real_estates.all()

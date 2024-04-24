@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 from apps.customers.models.categories import Category
 from apps.customers.models.customers import Customer
-from apps.customers.models.groups import Group, GroupKeyword
+from apps.customers.models.groups import Group
 from apps.customers.models.keywords import Keyword
 from apps.customers.models.real_estate import RealEstate
 
@@ -27,7 +27,7 @@ class CustomerAdminForm(forms.ModelForm):
         required=False,
     )
     groups_keywords = forms.ModelMultipleChoiceField(
-        queryset=GroupKeyword.objects.all(),
+        queryset=Keyword.objects.all(),
         label="GroupKeywords",
         widget=widgets.FilteredSelectMultiple("GroupKeywords", is_stacked=False),
         required=False,
@@ -70,5 +70,4 @@ class RealEstateAdmin(admin.ModelAdmin):
 
 admin.site.register(Category)
 admin.site.register(Group)
-admin.site.register(GroupKeyword)
 admin.site.register(Keyword)

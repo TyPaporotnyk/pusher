@@ -16,13 +16,3 @@ class Group(TimedBaseModel):
             return f"{self.name} - {self.category}"
         else:
             return f"{self.url} - {self.category}"
-
-
-class GroupKeyword(TimedBaseModel):
-    name = models.CharField(max_length=50, verbose_name="Group Name")
-    category = models.ForeignKey(
-        Category, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Group Category"
-    )
-
-    def __str__(self):
-        return f"{self.name} - {self.category}"
