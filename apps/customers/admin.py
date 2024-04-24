@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
-from django.core.exceptions import ValidationError
 
 from apps.customers.models.categories import Category
 from apps.customers.models.customers import Customer
@@ -39,23 +38,10 @@ class CustomerAdminForm(forms.ModelForm):
         required=False,
     )
 
-    def clean(self):
-        max_pack = self.cleaned_data["max_pack"]
-
-        if len(self.cleaned_data["groups"]) > max_pack:
-            raise ValidationError({"groups": "Количество выбранных элементов больше, чем значение в поле max_pack."})
-
-        if len(self.cleaned_data["groups_keywords"]) > max_pack:
-            raise ValidationError(
-                {"groups_keywords": "Количество выбранных элементов больше, чем значение в поле max_pack."}
-            )
-
-        if len(self.cleaned_data["keywords"]) > max_pack:
-            raise ValidationError({"keywords": "Количество выбранных элементов больше, чем значение в поле max_pack."})
-
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
+    change_form_template = "admin/customers/customer/change_form.html"
     list_display = ["name", "username", "posts_received"]
     readonly_fields = ["pk", "telegram_id", "registration_date", "posts_received"]
     search_fields = ["name", "username"]

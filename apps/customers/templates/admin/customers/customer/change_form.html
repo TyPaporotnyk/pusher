@@ -1,0 +1,29 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("customer_form");
+            const maxPack = document.getElementById("id_max_pack");
+
+            form.addEventListener("submit", function (event) {
+                const groupField = document.getElementById("id_groups_to");
+                const groupKeywordField = document.getElementById("id_groups_keywords_to");
+                const keywordField = document.getElementById("id_keywords_to");
+                const maxPackValue = parseInt(maxPack.value)
+                let fieldNames = []
+
+                if (groupField.childElementCount > maxPackValue) fieldNames.push(`Groups [${groupField.childElementCount}]`);
+                if (groupKeywordField.childElementCount > maxPackValue) fieldNames.push(`Groups Keywords [${groupKeywordField.childElementCount}]`);
+                if (keywordField.childElementCount > maxPackValue) fieldNames.push(`Keywords [${keywordField.childElementCount}]`);
+
+                if (fieldNames.length > 0) {
+                    if (!confirm(`Вы уверены что хотите сохранить?\nПоля ${fieldNames.join(", ")} превышают значение поля Max Pack ${maxPackValue}`)) {
+                        event.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
