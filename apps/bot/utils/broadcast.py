@@ -32,6 +32,7 @@ class BaseBroadcasterService:
         pass
 
 
+@dataclass(kw_only=True)
 class GroupBroadcasterService(BaseBroadcasterService):
 
     def broadcast(self):
@@ -49,8 +50,10 @@ class GroupBroadcasterService(BaseBroadcasterService):
             advert_images = group_advert.attachments[: settings.MAX_IMAGES_PER_POST]
 
             for user in users:
-                if user.is_advert_contains(advert) and not is_message_contain_keywords(
-                    user.keywords.all(), message_template
+                # Проверка на то есть ли выбранный заказ у пользователя
+                # или не содержит ли сообщение ключевые слова пользователя
+                if user.is_advert_contains(advert) or not is_message_contain_keywords(
+                    user.groups_keywords.all(), message_template
                 ):
                     continue
 
@@ -61,6 +64,7 @@ class GroupBroadcasterService(BaseBroadcasterService):
         logger.info(f"Adverts sent count: {send_cont}")
 
 
+@dataclass(kw_only=True)
 class KeywordBroadcasterService(BaseBroadcasterService):
 
     def broadcast(self):
