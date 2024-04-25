@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.common.models import TimedBaseModel
+from apps.customers.models.blacklist import Blacklist
 from apps.customers.models.groups import Group
 from apps.customers.models.keywords import Keyword
 from apps.customers.models.real_estate import RealEstate
@@ -19,6 +20,7 @@ class Customer(TimedBaseModel):
     groups = models.ManyToManyField(Group, blank=True)
     groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
     keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
+    blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
     def is_advert_contains(self, advert: RealEstate) -> bool:
         return advert in self.real_estates.all()

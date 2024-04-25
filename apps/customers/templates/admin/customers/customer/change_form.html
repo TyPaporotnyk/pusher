@@ -11,15 +11,17 @@
                 const groupField = document.getElementById("id_groups_to");
                 const groupKeywordField = document.getElementById("id_groups_keywords_to");
                 const keywordField = document.getElementById("id_keywords_to");
+                const blacklist = document.getElementById("id_blacklist_to");
                 const maxPackValue = parseInt(maxPack.value)
                 let fieldNames = []
 
                 if (groupField.childElementCount > maxPackValue) fieldNames.push(`Groups [${groupField.childElementCount}]`);
                 if (groupKeywordField.childElementCount > maxPackValue) fieldNames.push(`Groups Keywords [${groupKeywordField.childElementCount}]`);
                 if (keywordField.childElementCount > maxPackValue) fieldNames.push(`Keywords [${keywordField.childElementCount}]`);
+                if (blacklist.childElementCount > maxPackValue) fieldNames.push(`Black List [${blacklist.childElementCount}]`);
 
                 if (fieldNames.length > 0) {
-                    if (!confirm(`Вы уверены что хотите сохранить?\nПоля ${fieldNames.join(", ")} превышают значение поля Max Pack ${maxPackValue}`)) {
+                    if (!confirm(`Вы уверены что хотите сохранить?\nПоля ${fieldNames.join(", ")} превышают значение поля Max Pack [${maxPackValue}]`)) {
                         event.preventDefault();
                     }
                 }

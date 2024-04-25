@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
 
+from apps.customers.models.blacklist import Blacklist
 from apps.customers.models.categories import Category
 from apps.customers.models.customers import Customer
 from apps.customers.models.groups import Group
@@ -38,6 +39,12 @@ class CustomerAdminForm(forms.ModelForm):
         widget=widgets.FilteredSelectMultiple("Keywords", is_stacked=False),
         required=False,
     )
+    blacklist = forms.ModelMultipleChoiceField(
+        queryset=Blacklist.objects.all(),
+        label="Blacklist",
+        widget=widgets.FilteredSelectMultiple("Blacklist", is_stacked=False),
+        required=False,
+    )
 
 
 @admin.register(Customer)
@@ -58,3 +65,4 @@ class RealEstateAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(Group)
 admin.site.register(Keyword)
+admin.site.register(Blacklist)
