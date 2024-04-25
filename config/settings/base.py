@@ -166,7 +166,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     # "bot_broadcast_keywords_task": {
     #     "task": "apps.bot.tasks.broadcast_keyword_task",
-    #     "schedule": timedelta(minutes=30),
+    #     "schedule": timedelta(minutes=10),
     # },
 }
 
