@@ -8,6 +8,7 @@ from telebot import TeleBot
 from apps.bot.services.facebook import FacebookBaseRepository
 from apps.bot.utils import send_message
 from apps.bot.utils.text import get_advert_text
+from apps.customers.models.blacklist import Blacklist
 from apps.customers.models.keywords import Keyword
 from apps.customers.services.customers import CustomerService
 from apps.customers.services.real_estate import RealEstateService
@@ -18,6 +19,11 @@ logger = logging.getLogger(__name__)
 def is_message_contain_keywords(user_keywords: list[Keyword], message: str) -> bool:
     is_any_keyword_in_message = any([user_keyword.name in message for user_keyword in user_keywords])
     return not user_keywords or is_any_keyword_in_message
+
+
+def is_message_contain_blacklists(blacklists_keywords: list[Blacklist], message: str) -> bool:
+    is_any_keyword_in_message = any([blacklists_keyword.name in message for blacklists_keyword in blacklists_keywords])
+    return is_any_keyword_in_message
 
 
 @dataclass(kw_only=True)
@@ -52,8 +58,11 @@ class GroupBroadcasterService(BaseBroadcasterService):
             for user in users:
                 # Проверка на то есть ли выбранный заказ у пользователя
                 # или не содержит ли сообщение ключевые слова пользователя
-                if user.is_advert_contains(advert) or not is_message_contain_keywords(
-                    user.groups_keywords.all(), message_template
+                # или содержит ли сообщение запрещенные слова для пользователя
+                if (
+                    user.is_advert_contains(advert)
+                    or not is_message_contain_keywords(user.groups_keywords.all(), message_template)
+                    or is_message_contain_blacklists(user.blacklist.all(), message_template)
                 ):
                     continue
 
@@ -82,7 +91,9 @@ class KeywordBroadcasterService(BaseBroadcasterService):
             advert_images = keyword_advert.attachments[: settings.MAX_IMAGES_PER_POST]
 
             for user in users:
-                if user.is_advert_contains(advert):
+                if user.is_advert_contains(advert) or is_message_contain_blacklists(
+                    user.blacklist.all(), message_template
+                ):
                     continue
 
                 send_message(self.bot, user.telegram_id, message_template, advert_images)
