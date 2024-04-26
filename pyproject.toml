@@ -16,7 +16,6 @@ mysql-connector-python = "^8.3.0"
 celery = {extras = ["redis"], version = "^5.4.0"}
 pydantic = "^2.7.0"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
 black = "^24.4.0"
@@ -25,10 +24,8 @@ flake8 = "^7.0.0"
 pre-commit = "^3.7.0"
 pytest-django = "^4.8.0"
 
-
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "core.project.settings.local"
-
 
 [tool.black]
 line-length = 119
@@ -38,8 +35,6 @@ target-version = ['py312']
 profile = "black"
 line_length = 119
 skip = ["migrations/"]
-
-
 
 [build-system]
 requires = ["poetry-core"]

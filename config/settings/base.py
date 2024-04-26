@@ -147,6 +147,11 @@ REDIS_PORT = os.environ.get("REDIS_PORT")
 REDIS_DB = os.environ.get("REDIS_DB")
 REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
+# Broadcaster settings
+MAX_POSTS_PER_TIME = int(os.environ.get("MAX_POSTS_PER_TIME"))
+MAX_IMAGES_PER_POST = int(os.environ.get("MAX_IMAGES_PER_POST"))
+TIME_CHECK_PERIOD = int(os.environ.get("TIME_CHECK_PERIOD"))
+
 # Celery setting
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
@@ -162,14 +167,10 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     "bot_broadcast_groups_task": {
         "task": "apps.bot.tasks.broadcast_group_task",
-        "schedule": timedelta(minutes=10),
+        "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
     },
     # "bot_broadcast_keywords_task": {
     #     "task": "apps.bot.tasks.broadcast_keyword_task",
-    #     "schedule": timedelta(minutes=10),
+    #     "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
     # },
 }
-
-# Broadcaster settings
-MAX_POSTS_PER_TIME = int(os.environ.get("MAX_POSTS_PER_TIME"))
-MAX_IMAGES_PER_POST = int(os.environ.get("MAX_IMAGES_PER_POST"))
