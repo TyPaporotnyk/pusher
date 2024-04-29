@@ -17,6 +17,7 @@ class Customer(TimedBaseModel):
     is_active = models.BooleanField(default=False)
     real_estates = models.ManyToManyField(RealEstate, blank=True)
     telegram_id = models.BigIntegerField(blank=True, null=True)
+    service_package = models.ForeignKey("ClientServicePackage", blank=True, null=True, on_delete=models.SET_NULL)
     groups = models.ManyToManyField(Group, blank=True)
     groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
     keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")

@@ -4,6 +4,7 @@ from django.contrib.admin import widgets
 
 from apps.customers.models.blacklist import Blacklist
 from apps.customers.models.categories import Category
+from apps.customers.models.client_service_package import ClientServicePackage
 from apps.customers.models.customers import Customer
 from apps.customers.models.groups import Group
 from apps.customers.models.keywords import Keyword
@@ -19,6 +20,7 @@ class CustomerAdminForm(forms.ModelForm):
             "email",
             "password",
             "max_pack",
+            "service_package",
         ]
 
     groups = forms.ModelMultipleChoiceField(
@@ -60,6 +62,11 @@ class CustomerAdmin(admin.ModelAdmin):
 class RealEstateAdmin(admin.ModelAdmin):
     list_display = ["real_estate_id", "website"]
     ordering = ["-created_at"]
+
+
+@admin.register(ClientServicePackage)
+class ClientServicePackageAdmin(admin.ModelAdmin):
+    list_display = ["name"]
 
 
 admin.site.register(Category)
