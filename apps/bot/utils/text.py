@@ -1,20 +1,38 @@
-from apps.bot.texts import MESSAGE_LINK_TEXT
-from apps.bot.utils.ai import find_emails, find_phone_numbers
+import re
+
+from django.template.loader import get_template
 
 
-def get_advert_text(additional: str, advert_link: str) -> str:
-    phone_numbers = find_phone_numbers(additional)
-    emails = find_emails(additional)
+def find_phone_numbers(text) -> list[str]:
+    phone_pattern = r"\+?\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}"
 
-    message = ""
+    phone_numbers = re.findall(phone_pattern, text)
 
-    if phone_numbers:
-        message += f"{', '.join(phone_numbers)}\n\n"
+    cleaned_numbers = []
 
-    if emails:
-        message += f"{', '.join(emails)}\n\n"
+    for number in phone_numbers:
+        cleaned_number = re.sub(r"\D", "", number)
+        cleaned_numbers.append(cleaned_number)
 
-    message += f"{additional}\n\n"
-    message += f"<a href='{advert_link}'>{MESSAGE_LINK_TEXT}</a>"
+    return cleaned_numbers
+
+
+def get_advert_text(message: str, advert_link: str, keywords: list[str], group_name: str, group_link: str) -> str:
+    phone_numbers = find_phone_numbers(message)
+    phone_number = phone_numbers[0] if phone_numbers else None
+
+    keywords = list(map(lambda x: x.replace(" ", ""), keywords))
+
+    context = {
+        "message": message,
+        "phone_number": phone_number,
+        "advert_link": advert_link,
+        "keywords": keywords,
+        "group_name": group_name,
+        "group_link": group_link,
+    }
+
+    template = get_template("bot/message/send_message.html")
+    message = template.render(context)
 
     return message

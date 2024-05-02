@@ -1,5 +1,5 @@
 import logging
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from django.conf import settings
@@ -16,9 +16,8 @@ from apps.customers.services.real_estate import RealEstateService
 logger = logging.getLogger(__name__)
 
 
-def is_message_contain_keywords(user_keywords: list[Keyword], message: str) -> bool:
-    is_any_keyword_in_message = any([user_keyword.name in message for user_keyword in user_keywords])
-    return not user_keywords or is_any_keyword_in_message
+def get_user_keywords_from_message(user_keywords: list[Keyword], message: str) -> list[str]:
+    return [user_keyword.name for user_keyword in user_keywords if user_keyword.name in message]
 
 
 def is_message_contain_blacklists(blacklists_keywords: list[Blacklist], message: str) -> bool:
@@ -27,7 +26,7 @@ def is_message_contain_blacklists(blacklists_keywords: list[Blacklist], message:
 
 
 @dataclass(kw_only=True)
-class BaseBroadcasterService:
+class BaseBroadcasterService(ABC):
     facebook_service: FacebookBaseRepository
     customer_service: CustomerService
     real_estate_service: RealEstateService
@@ -50,25 +49,27 @@ class GroupBroadcasterService(BaseBroadcasterService):
         logger.info(f"Adverts received: {len(new_group_adverts)}")
 
         for group_advert in new_group_adverts:
-            message_template = get_advert_text(group_advert.message, group_advert.post_link)
             advert = self.real_estate_service.get_or_create(group_advert.id, "group")
             users = self.customer_service.get_all_by_group_url(group_advert.group_link)
             advert_images = group_advert.attachments[: settings.MAX_IMAGES_PER_POST]
-
             for user in users:
-                # Проверка на то есть ли выбранный заказ у пользователя
-                # или не содержит ли сообщение ключевые слова пользователя
-                # или содержит ли сообщение запрещенные слова для пользователя
-                if (
-                    user.is_advert_contains(advert)
-                    or not is_message_contain_keywords(user.groups_keywords.all(), message_template)
-                    or is_message_contain_blacklists(user.blacklist.all(), message_template)
+                if user.is_advert_contains(advert) or is_message_contain_blacklists(
+                    user.blacklist.all(), group_advert.message
                 ):
                     continue
 
-                send_message(self.bot, user.telegram_id, message_template, advert_images)
-                user.add_advert(advert)
-                send_cont += 1
+                if keywords := get_user_keywords_from_message(user.groups_keywords.all(), group_advert.message):
+                    message_template = get_advert_text(
+                        message=group_advert.message,
+                        advert_link=group_advert.post_link,
+                        keywords=keywords,
+                        group_name=group_advert.group_name,
+                        group_link=group_advert.group_link,
+                    )
+                    send_message(self.bot, user.telegram_id, message_template, advert_images)
+                    user.add_advert(advert)
+
+                    send_cont += 1
 
         logger.info(f"Adverts sent count: {send_cont}")
 
@@ -85,17 +86,23 @@ class KeywordBroadcasterService(BaseBroadcasterService):
         logger.info(f"New keyword adverts received: {len(new_keyword_adverts)}")
 
         for keyword_advert in new_keyword_adverts:
-            message_template = get_advert_text(keyword_advert.message, keyword_advert.post_link)
             advert = self.real_estate_service.get_or_create(keyword_advert.id, "keyword")
             users = self.customer_service.get_all_by_keyword(keyword_advert.key)
             advert_images = keyword_advert.attachments[: settings.MAX_IMAGES_PER_POST]
 
             for user in users:
                 if user.is_advert_contains(advert) or is_message_contain_blacklists(
-                    user.blacklist.all(), message_template
+                    user.blacklist.all(), keyword_advert.message
                 ):
                     continue
 
+                message_template = get_advert_text(
+                    message=keyword_advert.message,
+                    advert_link=keyword_advert.post_link,
+                    keywords=[],
+                    group_name=keyword_advert.group_name,
+                    group_link=keyword_advert.group_link,
+                )
                 send_message(self.bot, user.telegram_id, message_template, advert_images)
                 user.add_advert(advert)
                 sent_count += 1
