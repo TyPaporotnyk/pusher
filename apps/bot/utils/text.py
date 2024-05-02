@@ -21,7 +21,7 @@ def get_advert_text(message: str, advert_link: str, keywords: list[str], group_n
     phone_numbers = find_phone_numbers(message)
     phone_number = phone_numbers[0] if phone_numbers else None
 
-    keywords = list(map(lambda x: x.replace(" ", ""), keywords))
+    keywords = list(map(lambda x: x.replace(" ", "_"), keywords))
 
     context = {
         "message": message,
