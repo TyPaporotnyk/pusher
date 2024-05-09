@@ -12,7 +12,7 @@ class FacebookBase(BaseModel):
     creation_time: datetime
     message: str
     attachments: list[str]
-    tags: str
+    tags: str | None
 
 
 class FacebookGroup(FacebookBase):
