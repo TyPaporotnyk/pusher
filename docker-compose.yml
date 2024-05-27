@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
-    restart: on-failure
+    restart: always
     network_mode: host
 
   web:
