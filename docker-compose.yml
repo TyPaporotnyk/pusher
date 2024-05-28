@@ -13,7 +13,7 @@ services:
     image: nginx:1.22.0
     restart: always
     ports:
-      - '80:80'
+      - '8080:8080'
     volumes:
       - ./nginx/configs/:/etc/nginx/sites-enabled/:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
@@ -23,9 +23,7 @@ services:
   web:
     extends:
       service: common
-    command: poetry run python manage.py runserver 0.0.0.0:8080
-    ports:
-      - '8080:8080'
+    command: poetry run python manage.py runserver 0.0.0.0:5000
 
   bot:
     extends:
