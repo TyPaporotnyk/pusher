@@ -25,7 +25,7 @@ services:
   web:
     extends:
       service: common
-    command: poetry run python manage.py runserver 0.0.0.0:5000
+    command: poetry run gunicorn config.wsgi --bind 0.0.0.0:5000 --workers 3 --log-level=debug --chdir=/app
 
   bot:
     extends:
