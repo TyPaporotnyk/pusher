@@ -25,6 +25,9 @@ services:
   web:
     extends:
       service: common
+    volumes:
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
     command: poetry run gunicorn config.wsgi --bind 0.0.0.0:5000 --workers 3 --log-level=debug --chdir=/app
 
   bot:
