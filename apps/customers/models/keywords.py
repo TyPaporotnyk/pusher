@@ -5,7 +5,7 @@ from apps.customers.models.categories import Category
 
 
 class Keyword(TimedBaseModel):
-    name = models.CharField(max_length=50, verbose_name="Keyword name")
+    name = models.TextField(verbose_name="Keyword name")
     category = models.ForeignKey(
         Category, null=True, blank=True, verbose_name="Keyword category", on_delete=models.CASCADE
     )

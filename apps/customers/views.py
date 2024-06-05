@@ -12,7 +12,7 @@ def import_keywords_view(request):
             import_keyword_from_excel(
                 excel_file,
             )
-            return redirect("customers:import_success")
+            return redirect("import_success")
     else:
         form = ExcelUploadForm()
 
