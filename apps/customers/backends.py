@@ -11,8 +11,6 @@ class CaseInsensitiveModelBackend(ModelBackend):
             case_insensitive_username_field = "{}__iexact".format(user_model.USERNAME_FIELD)
             user = user_model._default_manager.get(**{case_insensitive_username_field: username})
         except user_model.DoesNotExist:
-            # Run the default password hasher once to reduce the timing
-            # difference between an existing and a non-existing user (#20760).
             user_model().set_password(password)
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
