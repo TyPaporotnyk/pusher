@@ -1,6 +1,0 @@
-MESSAGE_LINK_TEXT = "🌐 קישור לפוסט"
-USERNAME_INPUT_TEXT = "היי, בשביל להתחבר תזין את השם משתמש שלך"
-PASSWORD_INPUT_TEXT = "הזן את הסיסמא שלך"
-ERROR_ACCOUNT_LOGIN = "אחד הפרטים שהזנת שגויים נסה שנית"
-ALREADY_ACCOUNT_LOGIN = "אתה כבר מחובר"
-SUCCESS_ACCOUNT_LOGIN = "התחברת בהצלחה ברוך הבא"

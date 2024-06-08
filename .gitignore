@@ -4,6 +4,8 @@ venv
 .idea
 .vscode
 staticfiles/
+media/*
+!media/.gitkeep
 
 celerybeat-schedule.bak
 celerybeat-schedule.dat
