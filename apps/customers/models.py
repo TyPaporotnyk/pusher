@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
+from apps.common.models import Blacklist, Group, Keyword
 from apps.customers.managers import AccountManager
 
 
@@ -18,6 +19,11 @@ class Customer(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+
+    groups = models.ManyToManyField(Group, blank=True)
+    groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
+    keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
+    blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
     objects = AccountManager()
 

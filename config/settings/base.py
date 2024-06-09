@@ -13,24 +13,35 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
+    "jet",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "drf_yasg",
+    "drf_spectacular",
     "rest_framework",
     "rest_framework_simplejwt",
     # first party
+    "apps.common",
     "apps.customers",
     "apps.tokens",
     "apps.posts",
+    "apps.filters",
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Pusher API",
+    "DESCRIPTION": "Pusher API documentations",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 SIMPLE_JWT = {
@@ -108,7 +119,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = "customers.Customer"
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
