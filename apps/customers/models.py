@@ -2,15 +2,15 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
 from apps.common.models import Blacklist, Group, Keyword
-from apps.customers.managers import AccountManager
+from apps.customers.managers import CustomerManager
 
 
 class Customer(AbstractBaseUser):
     username = models.CharField(max_length=120, unique=True)
     email = models.EmailField(max_length=255, unique=True)
 
-    first_name = models.CharField(max_length=120)
-    last_name = models.CharField(max_length=120)
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
 
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
@@ -20,12 +20,13 @@ class Customer(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    max_pack = models.PositiveIntegerField(default=0)
     groups = models.ManyToManyField(Group, blank=True)
     groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
     keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
     blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
-    objects = AccountManager()
+    objects = CustomerManager()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]

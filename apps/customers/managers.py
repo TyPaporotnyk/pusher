@@ -1,7 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 
 
-class AccountManager(BaseUserManager):
+class CustomerManager(BaseUserManager):
 
     def create_user(self, username, email, password=None):
         if not username:

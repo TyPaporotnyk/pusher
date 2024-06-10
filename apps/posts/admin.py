@@ -11,4 +11,5 @@ class PostImageInline(admin.TabularInline):
 class PostAdmin(admin.ModelAdmin):
     list_display = ("title", "slug")
     list_display_links = ("title", "slug")
+    prepopulated_fields = {"slug": ("title",)}
     inlines = [PostImageInline]

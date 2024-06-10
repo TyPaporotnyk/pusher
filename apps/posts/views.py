@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 
 from apps.common.pagination import Pagination
+from apps.customers.permissions import IsAdmin
 from apps.filters.services.customer import CustomerPostsFilter
 from apps.posts.repository import PostRepository
 from apps.posts.serializers import PostSerializer
@@ -10,6 +11,7 @@ from apps.posts.services import PostService
 class PostView(viewsets.ReadOnlyModelViewSet):
     serializer_class = PostSerializer
     pagination_class = Pagination
+    permission_classes = (IsAdmin,)
 
     def get_queryset(self):
         post_service = PostService(post_repository=PostRepository())

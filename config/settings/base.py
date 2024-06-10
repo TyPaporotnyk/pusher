@@ -13,18 +13,19 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "jet",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party
     "drf_spectacular",
     "rest_framework",
     "rest_framework_simplejwt",
     # first party
     "apps.common",
+    "apps.import",
     "apps.customers",
     "apps.tokens",
     "apps.posts",

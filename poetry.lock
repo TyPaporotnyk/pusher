@@ -397,21 +397,6 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
-name = "django-4-jet"
-version = "1.0.9"
-description = "Modern template for Django-4 admin interface with improved functionality"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-4-jet-1.0.9.tar.gz", hash = "sha256:d38f236b39539304dbe14a45f3206340e6da933a5c03d785e76dbb558e4f0ffa"},
-    {file = "django_4_jet-1.0.9-py3-none-any.whl", hash = "sha256:68c4550cacea0d8b9d7a8022221e444c181bf4c9c44d28dc40362f8a4016c7d6"},
-]
-
-[package.dependencies]
-Django = "*"
-six = "*"
-
-[[package]]
 name = "django-filter"
 version = "24.2"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
@@ -1708,4 +1693,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "1efb7460c2509e32cc6cdae5c749f953de946343d5292d141c90caa403309467"
+content-hash = "ad102c0f7653509c164f53cc2cface1764951042c1537737b9e6d766d4e85ad3"
