@@ -1,4 +1,4 @@
-from apps.common.repository import Repository
+from apps.base.repository import Repository
 from apps.posts.models import Post
 
 

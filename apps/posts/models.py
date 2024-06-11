@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
-from apps.common.models import TimedBaseModel
+from apps.base.models import TimedBaseModel
 from apps.posts.utils.upload import get_post_image_path
 
 

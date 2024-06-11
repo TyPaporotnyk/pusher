@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 
 from apps.customers.permissions import IsAdmin
@@ -6,6 +7,7 @@ from apps.customers.serializers import CustomerSerializer
 from apps.customers.services import CustomerService
 
 
+@extend_schema(tags=["Customer"])
 class CustomerView(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     permission_classes = (IsAdmin,)
@@ -16,6 +18,7 @@ class CustomerView(viewsets.ModelViewSet):
         return customer_service.get_active_customers()
 
 
+@extend_schema(tags=["Customer"])
 class CustomerOwnerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 

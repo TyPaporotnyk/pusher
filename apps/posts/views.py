@@ -1,6 +1,7 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 
-from apps.common.pagination import Pagination
+from apps.base.pagination import Pagination
 from apps.customers.permissions import IsAdmin
 from apps.filters.services.customer import CustomerPostsFilter
 from apps.posts.repository import PostRepository
@@ -8,6 +9,7 @@ from apps.posts.serializers import PostSerializer
 from apps.posts.services import PostService
 
 
+@extend_schema(tags=["Posts"])
 class PostView(viewsets.ReadOnlyModelViewSet):
     serializer_class = PostSerializer
     pagination_class = Pagination
@@ -18,6 +20,7 @@ class PostView(viewsets.ReadOnlyModelViewSet):
         return post_service.get_all_posts()
 
 
+@extend_schema(tags=["Posts"])
 class UserPostView(viewsets.ReadOnlyModelViewSet):
     serializer_class = PostSerializer
     pagination_class = Pagination

@@ -122,9 +122,6 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "customers.Customer"
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "Europe/Kiev"
@@ -173,13 +170,6 @@ LOGGING = {
 # Telegram bot creds
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_BOT_THREAD_COUNT = int(os.environ.get("TELEGRAM_BOT_THREAD_COUNT"))
-
-# External db creds
-DB_EXTERNAL_NAME = os.environ.get("DB_EXTERNAL_NAME")
-DB_EXTERNAL_USER = os.environ.get("DB_EXTERNAL_USER")
-DB_EXTERNAL_PASSWORD = os.environ.get("DB_EXTERNAL_PASSWORD")
-DB_EXTERNAL_HOST = os.environ.get("DB_EXTERNAL_HOST")
-DB_EXTERNAL_PORT = os.environ.get("DB_EXTERNAL_PORT")
 
 # Redis creds
 REDIS_HOST = os.environ.get("REDIS_HOST")
