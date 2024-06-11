@@ -1,5 +1,4 @@
 import os
-from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -8,6 +7,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = os.environ.get("DEBUG")
+DOMEN_NAME = os.environ.get("DOMEN_NAME")
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
@@ -22,12 +22,12 @@ INSTALLED_APPS = [
     # third party
     "drf_spectacular",
     "rest_framework",
-    "rest_framework_simplejwt",
+    "rest_framework.authtoken",
+    "djoser",
     # first party
     "apps.common",
     "apps.import",
     "apps.customers",
-    "apps.tokens",
     "apps.posts",
     "apps.filters",
 ]
@@ -35,7 +35,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.TokenAuthentication",),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -45,14 +45,14 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-    "SLIDING_TOKEN_LIFETIME": timedelta(days=30),
-    "SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER": timedelta(days=1),
-    "SLIDING_TOKEN_LIFETIME_LATE_USER": timedelta(days=30),
-    "TOKEN_OBTAIN_SERIALIZER": "apps.tokens.serializers.TokenSerializer",
-}
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
+#     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+#     "SLIDING_TOKEN_LIFETIME": timedelta(days=30),
+#     "SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER": timedelta(days=1),
+#     "SLIDING_TOKEN_LIFETIME_LATE_USER": timedelta(days=30),
+#     "TOKEN_OBTAIN_SERIALIZER": "apps.tokens.serializers.TokenSerializer",
+# }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -140,33 +140,6 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": True,
-    "formatters": {
-        "verbose": {
-            "format": (
-                "%(levelname)s %(asctime)s %(module)s %(process)d "
-                "%(thread)d %(message)s error_meta:\n%(error_meta)s"
-            ),
-        },
-    },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        },
-    },
-    "loggers": {
-        "django.request": {
-            "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": False,
-        },
-    },
-}
-
 # Telegram bot creds
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_BOT_THREAD_COUNT = int(os.environ.get("TELEGRAM_BOT_THREAD_COUNT"))
@@ -194,13 +167,13 @@ CELERY_TIMEZONE = "Europe/Kiev"
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-CELERY_BEAT_SCHEDULE = {
-    "bot_broadcast_groups_task": {
-        "task": "apps.bot.tasks.broadcast_group_task",
-        "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
-    },
-    # "bot_broadcast_keywords_task": {
-    #     "task": "apps.bot.tasks.broadcast_keyword_task",
-    #     "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
-    # },
-}
+# CELERY_BEAT_SCHEDULE = {
+#     "bot_broadcast_groups_task": {
+#         "task": "apps.bot.tasks.broadcast_group_task",
+#         "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
+#     },
+#     # "bot_broadcast_keywords_task": {
+#     #     "task": "apps.bot.tasks.broadcast_keyword_task",
+#     #     "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
+#     # },
+# }

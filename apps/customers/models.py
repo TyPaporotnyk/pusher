@@ -3,6 +3,7 @@ from django.db import models
 
 from apps.common.models import Blacklist, Group, Keyword
 from apps.customers.managers import CustomerManager
+from apps.posts.models import Post
 
 
 class Customer(AbstractBaseUser):
@@ -26,6 +27,9 @@ class Customer(AbstractBaseUser):
     keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
     blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
+    matched_posts = models.ManyToManyField(Post, blank=True, related_name="matched_posts")
+    telegram_id = models.BigIntegerField(blank=True, null=True)
+
     objects = CustomerManager()
 
     USERNAME_FIELD = "username"
@@ -39,6 +43,10 @@ class Customer(AbstractBaseUser):
 
     def __str__(self) -> str:
         return self.username
+
+    @property
+    def match_post_count(self):
+        return self.matched_posts.count()
 
     class Meta:
         verbose_name = "Customer"

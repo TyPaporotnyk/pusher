@@ -11,6 +11,8 @@ class Post(TimedBaseModel):
     description = models.TextField()
     slug = models.SlugField(max_length=500)
     url = models.URLField(max_length=500)
+    group_name = models.CharField(max_length=500, blank=True, null=True)
+    group_url = models.URLField(max_length=500, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -25,4 +27,4 @@ class PostImage(TimedBaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
 
     def __str__(self):
-        return f"Image {self.id} for post {self.post.id}"
+        return self.image.url

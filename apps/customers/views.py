@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
 
-from apps.customers.permissions import IsAdmin
 from apps.customers.repository import CustomerRepository
 from apps.customers.serializers import CustomerSerializer
 from apps.customers.services import CustomerService
@@ -10,7 +10,7 @@ from apps.customers.services import CustomerService
 @extend_schema(tags=["Customer"])
 class CustomerView(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
         customer_repository = CustomerRepository()

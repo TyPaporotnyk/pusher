@@ -10,16 +10,20 @@ class CustomerAdmin(UserAdmin):
     change_form_template = "admin/customers/change_form_template.html"
     form = CustomerChangeForm
 
-    list_display = ("username", "first_name", "last_name")
+    list_display = ("username", "first_name", "last_name", "match_post_count", "is_active")
     list_display_links = ("username", "first_name", "last_name")
-    readonly_fields = ("last_login", "date_joined")
+    readonly_fields = (
+        "last_login",
+        "date_joined",
+        "telegram_id",
+    )
 
     fieldsets = (
-        (None, {"fields": ("username", "email", "password")}),
-        ("Personal Info", {"fields": ("first_name", "last_name")}),
-        ("Permissions", {"fields": ("is_active", "is_admin", "is_superuser")}),
+        (None, {"fields": ("username", "password")}),
+        ("Personal Info", {"fields": ("email", "first_name", "last_name")}),
+        ("Permissions", {"fields": ("is_active", "is_admin", "is_staff", "is_superuser")}),
         ("Parser settings", {"fields": ("max_pack", "groups", "groups_keywords", "keywords", "blacklist")}),
-        ("Important Dates", {"fields": ("last_login", "date_joined")}),
+        ("Important datas", {"fields": ("telegram_id", "last_login", "date_joined")}),
     )
     add_fieldsets = (
         (

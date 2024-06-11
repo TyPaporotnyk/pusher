@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from apps.base.services.excel import import_group_from_excel, import_keyword_from_excel
@@ -24,6 +25,7 @@ def import_base_view(request, *, import_function, title: str):
     )
 
 
+@login_required
 def import_keywords_view(request):
     return import_base_view(
         request,
@@ -32,6 +34,7 @@ def import_keywords_view(request):
     )
 
 
+@login_required
 def import_groups_view(request):
     return import_base_view(
         request,
