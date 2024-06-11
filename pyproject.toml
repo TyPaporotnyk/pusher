@@ -29,9 +29,10 @@ flake8 = "^7.0.0"
 pre-commit = "^3.7.0"
 pytest-django = "^4.8.0"
 faker = "^25.8.0"
+factory-boy = "^3.3.0"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "core.project.settings.local"
+DJANGO_SETTINGS_MODULE = "config.settings.local"
 
 [tool.black]
 line-length = 119
