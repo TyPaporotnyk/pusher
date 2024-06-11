@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 
-from apps.base.services import import_group_from_excel, import_keyword_from_excel
+from apps.base.services.excel import import_group_from_excel, import_keyword_from_excel
 
 from .forms import ExcelFileUploadForm
 

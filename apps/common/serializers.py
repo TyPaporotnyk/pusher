@@ -11,7 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(many=True, read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -19,7 +19,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class KeywordSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(many=True, read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Keyword
@@ -27,7 +27,7 @@ class KeywordSerializer(serializers.ModelSerializer):
 
 
 class BlacklistSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(many=True, read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Blacklist
