@@ -30,11 +30,6 @@ services:
       - ./media:/app/media
     command: poetry run gunicorn config.wsgi --bind 0.0.0.0:5000 --workers 3 --log-level=debug --chdir=/app
 
-  bot:
-    extends:
-      service: common
-    command: poetry run python manage.py bot
-
   celery:
     extends:
       service: common
