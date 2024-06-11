@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "rest_framework",
     "rest_framework.authtoken",
+    "corsheaders",
     "djoser",
     # first party
     "apps.common",
@@ -55,6 +56,7 @@ SPECTACULAR_SETTINGS = {
 # }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -167,13 +169,16 @@ CELERY_TIMEZONE = "Europe/Kiev"
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-# CELERY_BEAT_SCHEDULE = {
-#     "bot_broadcast_groups_task": {
-#         "task": "apps.bot.tasks.broadcast_group_task",
-#         "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
-#     },
-#     # "bot_broadcast_keywords_task": {
-#     #     "task": "apps.bot.tasks.broadcast_keyword_task",
-#     #     "schedule": timedelta(minutes=TIME_CHECK_PERIOD),
-#     # },
-# }
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:3000",
+    "https://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
+
+CORS_ORIGIN_WHITELIST = [
+    "https://localhost:3000",
+    "https://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:5173",
+]

@@ -17,6 +17,12 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = os.environ.get("DJANGO_SECURE_HSTS_INCLUDE_SUBD
 SECURE_HSTS_PRELOAD = os.environ.get("DJANGO_SECURE_HSTS_PRELOAD", True)
 SECURE_CONTENT_TYPE_NOSNIFF = os.environ.get("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", True)
 
+CORS_ORIGIN_WHITELIST = [
+    "https://localhost:3000",
+    "https://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
 
 LOGGING = {
     "version": 1,
