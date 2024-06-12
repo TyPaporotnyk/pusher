@@ -25,5 +25,4 @@ RUN poetry install --no-root --no-interaction --no-ansi
 
 COPY . /app/
 
-RUN sed -i 's/\r$//g' start
-RUN chmod +x start
+RUN poetry run python manage.py migrate && poetry run python manage.py collectstatic --noinput
