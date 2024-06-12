@@ -27,4 +27,4 @@ COPY start /app
 RUN sed -i 's/\r$//g' start
 RUN chmod +x start
 
-COPY .. /app/
+COPY . /app/
