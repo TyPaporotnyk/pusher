@@ -17,12 +17,18 @@ def find_phone_numbers(text) -> list[str]:
     return cleaned_numbers
 
 
+def truncate_text(text: str, limit=600) -> str:
+    if len(text) > limit:
+        return text[:limit] + "..."
+    return text
+
+
 def get_advert_text(message: str, advert_link: str, keywords: list[str], group_name: str, group_link: str) -> str:
     phone_numbers = find_phone_numbers(message)
     phone_number = phone_numbers[0] if phone_numbers else None
 
     keywords = list(map(lambda x: x.replace(" ", "_"), keywords))
-
+    message = truncate_text(message, limit=600)
     context = {
         "message": message,
         "phone_number": phone_number,

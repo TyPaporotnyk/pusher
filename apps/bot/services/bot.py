@@ -40,26 +40,3 @@ def split_message(text, max_length=4096):
         text = text[split_point:]
     parts.append(text)
     return parts
-
-
-def send_large_message(bot: TeleBot, user_id: int, message: str, photos: list[str]):
-    # Сначала отправляем фотографии с первой частью сообщения
-    sender_service = BotSenderService(bot)
-    if photos:
-        try:
-            sender_service.send_media(user_id, message, photos)
-            # Удаляем часть сообщения, отправленную с фотографиями
-            message = message[1024:]
-        except Exception as e:
-            logger.warning("Error sending media to bot due to %s", str(e))
-            sender_service.send(user_id, message)
-            return True
-
-    # Если оставшаяся часть сообщения превышает 4096 символов, делим его на части
-    if len(message) > 4096:
-        message_parts = split_message(message)
-        for part in message_parts:
-            sender_service.send(user_id, part)
-    else:
-        sender_service.send(user_id, message)
-    return True

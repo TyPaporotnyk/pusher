@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from django.conf import settings
 from telebot import TeleBot
 
-from apps.bot.services.bot import send_large_message
 from apps.bot.services.facebook import FacebookBaseRepository
 from apps.bot.utils import send_message
 from apps.bot.utils.text import get_advert_text
@@ -67,7 +66,7 @@ class GroupBroadcasterService(BaseBroadcasterService):
                         group_name=group_advert.group_name,
                         group_link=group_advert.group_link,
                     )
-                    send_large_message(self.bot, user.telegram_id, message_template, advert_images)
+                    send_message(self.bot, user.telegram_id, message_template, advert_images)
                     user.add_advert(advert)
 
                     send_cont += 1
