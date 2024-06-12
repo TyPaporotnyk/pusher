@@ -28,7 +28,7 @@ services:
     volumes:
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
-    command: ./start
+    command: start
 
   celery:
     extends:
