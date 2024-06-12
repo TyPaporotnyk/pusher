@@ -1,4 +1,5 @@
 import logging
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -17,7 +18,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_user_keywords_from_message(user_keywords: list[Keyword], message: str) -> list[str]:
-    return [user_keyword.name for user_keyword in user_keywords if user_keyword.name in message]
+    text_lower = message.lower()
+    keywords = [keyword.name for keyword in user_keywords]
+    found_keywords = {
+        keyword: bool(re.search(r"\b" + re.escape(keyword.lower()) + r"\b", text_lower)) for keyword in keywords
+    }
+
+    return [keyword for keyword, found in found_keywords.items() if found]
 
 
 def is_message_contain_blacklists(blacklists_keywords: list[Blacklist], message: str) -> bool:
