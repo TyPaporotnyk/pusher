@@ -23,8 +23,7 @@ RUN pip install poetry
 
 RUN poetry install --no-root --no-interaction --no-ansi
 
-COPY start /app
+COPY . /app/
+
 RUN sed -i 's/\r$//g' start
 RUN chmod +x start
-
-COPY . /app/
