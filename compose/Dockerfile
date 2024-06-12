@@ -16,11 +16,15 @@ RUN apk update && apk add --no-cache \
   freetype-dev \
   tzdata
 
-ADD pyproject.toml /app
+ADD ../pyproject.toml /app
 
 RUN pip install --upgrade pip
 RUN pip install poetry
 
 RUN poetry install --no-root --no-interaction --no-ansi
 
-COPY . /app/
+COPY ../compose/start /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
+COPY .. /app/
