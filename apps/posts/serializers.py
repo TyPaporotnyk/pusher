@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
-from apps.base.exceptions.files import DownloadFileException
-from apps.base.services.files import download_file
 from apps.posts.models import Post, PostImage
+from apps.posts.task import link_post_to_users_task, load_post_images_task
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -10,7 +9,18 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "url", "title", "description", "group_name", "group_url", "slug", "images")
+        fields = (
+            "id",
+            "url",
+            "title",
+            "description",
+            "group_name",
+            "group_url",
+            "slug",
+            "images",
+            "created_at",
+            "updated_at",
+        )
 
     def get_image_urls(self, obj):
         return [image.image.url for image in obj.images.all()]
@@ -28,10 +38,11 @@ class PostCreateSerializer(serializers.ModelSerializer):
         post = Post.objects.create(**validated_data)
 
         for image_url in images_data:
-            try:
-                post_image = PostImage(post=post)
-                post_image.image.save(*download_file(image_url))
-            except DownloadFileException:
-                continue
+
+            post_image = PostImage(post=post, original_image_url=image_url)
+            post_image.save()
+
+        link_post_to_users_task.delay(post_id=post.id)
+        load_post_images_task.delay(post_id=post.id)
 
         return post

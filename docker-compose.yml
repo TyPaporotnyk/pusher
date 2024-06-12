@@ -33,7 +33,7 @@ services:
   celery:
     extends:
       service: common
-    command: poetry run python -m celery -A config worker -l INFO
+    command: poetry run celery -A config worker -l INFO
     depends_on:
       - redis
 

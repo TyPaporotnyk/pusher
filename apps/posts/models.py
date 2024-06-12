@@ -23,8 +23,12 @@ class Post(TimedBaseModel):
 
 
 class PostImage(TimedBaseModel):
-    image = models.ImageField(upload_to=get_post_image_path)
+    image = models.ImageField(upload_to=get_post_image_path, blank=True, null=True)
+    original_image_url = models.URLField(max_length=500, blank=True, null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
 
     def __str__(self):
-        return self.image.url
+        if self.image:
+            return self.image.url
+        else:
+            return self.original_image_url

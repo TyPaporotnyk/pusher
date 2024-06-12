@@ -1,16 +1,9 @@
 import os
 
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
-from apps.posts.models import Post, PostImage
-from apps.posts.task import link_post_to_users
-
-
-@receiver(post_save, sender=Post)
-def post_created_handler(sender, instance, created, **kwargs):
-    if created:
-        link_post_to_users.apply_async((instance.id,), countdown=5)
+from apps.posts.models import PostImage
 
 
 @receiver(post_delete, sender=PostImage)
