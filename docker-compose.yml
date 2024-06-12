@@ -34,6 +34,8 @@ services:
     extends:
       service: common
     command: poetry run celery -A config worker -l INFO
+    volumes:
+      - ./media:/app/media
     depends_on:
       - redis
 
