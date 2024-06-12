@@ -11,6 +11,7 @@ DOMEN_NAME = os.environ.get("DOMEN_NAME")
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     "django.contrib.admin",
