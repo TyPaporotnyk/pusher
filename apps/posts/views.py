@@ -25,7 +25,7 @@ class UserPostView(viewsets.ReadOnlyModelViewSet):
     pagination_class = Pagination
 
     def get_queryset(self):
-        posts = self.request.user.matched_posts.all()
+        posts = self.request.user.matched_posts.all().prefetch_related("images")
         return posts
 
 

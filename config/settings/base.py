@@ -46,15 +46,6 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
-#     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-#     "SLIDING_TOKEN_LIFETIME": timedelta(days=30),
-#     "SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER": timedelta(days=1),
-#     "SLIDING_TOKEN_LIFETIME_LATE_USER": timedelta(days=30),
-#     "TOKEN_OBTAIN_SERIALIZER": "apps.tokens.serializers.TokenSerializer",
-# }
-
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -95,6 +86,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST"),
         "PORT": os.environ.get("DB_PORT"),
+        "ATOMIC_REQUESTS": True,
     },
 }
 
@@ -144,18 +136,12 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Telegram bot creds
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-TELEGRAM_BOT_THREAD_COUNT = int(os.environ.get("TELEGRAM_BOT_THREAD_COUNT"))
 
 # Redis creds
 REDIS_HOST = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
 REDIS_DB = os.environ.get("REDIS_DB")
 REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
-
-# Broadcaster settings
-MAX_POSTS_PER_TIME = int(os.environ.get("MAX_POSTS_PER_TIME"))
-MAX_IMAGES_PER_POST = int(os.environ.get("MAX_IMAGES_PER_POST"))
-TIME_CHECK_PERIOD = int(os.environ.get("TIME_CHECK_PERIOD"))
 
 # Celery setting
 CELERY_BROKER_URL = REDIS_URL
@@ -168,17 +154,3 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Kiev"
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:3000",
-    "https://localhost:5173",
-    "http://localhost:3000",
-    "http://localhost:5173",
-]
-
-CORS_ORIGIN_WHITELIST = [
-    "https://localhost:3000",
-    "https://localhost:5173",
-    "http://localhost:3000",
-    "http://localhost:5173",
-]

@@ -33,6 +33,7 @@ pytest-django = "^4.8.0"
 faker = "^25.8.0"
 factory-boy = "^3.3.0"
 flower = "^2.0.1"
+django-extensions = "^3.2.3"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.local"

@@ -9,7 +9,5 @@ class PostImageInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "slug")
-    list_display_links = ("title", "slug")
-    prepopulated_fields = {"slug": ("title",)}
+    list_display = ("id",)
     inlines = [PostImageInline]

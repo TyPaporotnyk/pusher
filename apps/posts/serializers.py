@@ -12,17 +12,16 @@ class PostSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "url",
-            "title",
             "description",
             "group_name",
             "group_url",
-            "slug",
             "images",
             "created_at",
             "updated_at",
         )
 
-    def get_image_urls(self, obj):
+    @staticmethod
+    def get_image_urls(obj):
         return [image.image.url for image in obj.images.all()]
 
 
@@ -31,7 +30,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("title", "description", "url", "group_name", "group_url", "images")
+        fields = ("description", "url", "group_name", "group_url", "images")
 
     def create(self, validated_data):
         images_data = validated_data.pop("images", [])
