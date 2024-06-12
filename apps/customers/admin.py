@@ -69,7 +69,25 @@ class ClientServicePackageAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
-admin.site.register(Category)
-admin.site.register(Group)
-admin.site.register(Keyword)
-admin.site.register(Blacklist)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+
+
+@admin.register(Keyword)
+class KeywordAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+
+
+@admin.register(Blacklist)
+class BlacklistAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
