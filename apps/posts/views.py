@@ -20,16 +20,16 @@ class PostView(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(tags=["Posts"])
+class PostCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    serializer_class = PostCreateSerializer
+    permission_classes = (IsAdminUser,)
+
+
+@extend_schema(tags=["Posts"])
 class UserPostView(viewsets.ReadOnlyModelViewSet):
     serializer_class = PostSerializer
     pagination_class = Pagination
 
     def get_queryset(self):
-        posts = self.request.user.matched_posts.all().prefetch_related("images")
+        posts = self.request.user.matched_posts.all().order_by("-created_at").prefetch_related("images")
         return posts
-
-
-@extend_schema(tags=["Posts"])
-class PostCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    serializer_class = PostCreateSerializer
-    permission_classes = (IsAdminUser,)

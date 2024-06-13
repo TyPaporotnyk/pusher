@@ -22,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_image_urls(obj):
-        return [image.image.url for image in obj.images.all()]
+        return [image.image.url for image in obj.images.all() if image.image]
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
