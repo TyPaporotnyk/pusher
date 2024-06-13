@@ -31,5 +31,11 @@ class UserPostView(viewsets.ReadOnlyModelViewSet):
     pagination_class = Pagination
 
     def get_queryset(self):
-        posts = self.request.user.matched_posts.all().order_by("-created_at").prefetch_related("images")
+        user = self.request.user
+        last_post_id = self.request.query_params.get("last_post_id", None)
+        posts = user.matched_posts.all().order_by("-created_at").prefetch_related("images")
+
+        if last_post_id is not None:
+            posts = posts.filter(id__lt=last_post_id)
+
         return posts
