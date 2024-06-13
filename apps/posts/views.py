@@ -1,5 +1,7 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAdminUser
 
 from apps.base.pagination import Pagination
@@ -29,13 +31,21 @@ class PostCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 class UserPostView(viewsets.ReadOnlyModelViewSet):
     serializer_class = PostSerializer
     pagination_class = Pagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         user = self.request.user
         last_post_id = self.request.query_params.get("last_post_id", None)
-        posts = user.matched_posts.all().order_by("-created_at").prefetch_related("images")
+        ordering = self.request.query_params.get("ordering", "-created_at")
+
+        posts = user.matched_posts.all().order_by(ordering).prefetch_related("images")
 
         if last_post_id is not None:
-            posts = posts.filter(id__lt=last_post_id)
+            if "-" in ordering:
+                posts = posts.filter(id__lt=last_post_id)
+            else:
+                posts = posts.filter(id__gt=last_post_id)
 
         return posts
