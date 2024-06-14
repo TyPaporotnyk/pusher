@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+from apps.common.models import Keyword
 from apps.customers.models import Customer
 from apps.posts.models import Post
 
@@ -7,7 +8,7 @@ from apps.posts.models import Post
 @dataclass
 class CustomerPostMatchFilter:
     customer: Customer
-    keyword_match_result: list[str] = field(default_factory=list)
+    keyword_match_result: list[Keyword] = field(default_factory=list)
 
     def is_valid(self, post: Post) -> bool:
         return (

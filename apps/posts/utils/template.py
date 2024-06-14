@@ -2,6 +2,8 @@ import re
 
 from django.template.loader import get_template
 
+from apps.common.models import Keyword
+
 
 def find_phone_numbers(text) -> list[str]:
     phone_pattern = r"\+?\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}"
@@ -23,7 +25,7 @@ def truncate_text(text: str, limit=600) -> str:
     return text
 
 
-def get_message_text(message: str, post_url: str, keywords: list[str], group_name: str, group_link: str) -> str:
+def get_message_text(message: str, post_url: str, keywords: list[Keyword], group_name: str, group_link: str) -> str:
     phone_numbers = find_phone_numbers(message)
     phone_number = phone_numbers[0] if phone_numbers else None
 

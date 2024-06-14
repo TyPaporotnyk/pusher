@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser
 
 from apps.base.pagination import Pagination
 from apps.posts.repository import PostRepository
-from apps.posts.serializers import PostCreateSerializer, PostSerializer
+from apps.posts.serializers import MatchPostSerializer, PostCreateSerializer, PostSerializer
 from apps.posts.services import PostService
 
 
@@ -29,7 +29,7 @@ class PostCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 @extend_schema(tags=["Posts"])
 class UserPostView(viewsets.ReadOnlyModelViewSet):
-    serializer_class = PostSerializer
+    serializer_class = MatchPostSerializer
     pagination_class = Pagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ["created_at"]
@@ -40,7 +40,7 @@ class UserPostView(viewsets.ReadOnlyModelViewSet):
         last_post_id = self.request.query_params.get("last_post_id", None)
         ordering = self.request.query_params.get("ordering", "-created_at")
 
-        posts = user.matched_posts.all().order_by(ordering).prefetch_related("images")
+        posts = user.matched_posts.all().order_by(ordering).select_related("post").prefetch_related("keywords")
 
         if last_post_id is not None:
             if "-" in ordering:

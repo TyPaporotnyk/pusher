@@ -6,6 +6,8 @@ from telebot import TeleBot
 from apps.base.exceptions.files import DownloadFileException
 from apps.base.services.bot import BotSenderService, send_message_to_telegram
 from apps.base.services.files import download_file
+from apps.common.models import Keyword
+from apps.customers.models import CustomerPost
 from apps.customers.repository import CustomerRepository
 from apps.customers.services import CustomerService
 from apps.filters.services.customer import CustomerPostMatchFilter
@@ -28,8 +30,11 @@ def link_post_to_users_task(post_id: int):
         match_filter = CustomerPostMatchFilter(customer)
 
         if match_filter.is_valid(post):
-            customer.matched_posts.add(post)
-            customer.save()
+            customer_post = CustomerPost(customer=customer, post=post)
+            customer_post.save()
+
+            customer_post.keywords.add(*match_filter.keyword_match_result)
+            # customer_post.save()
 
             if customer.telegram_id:
                 send_message_to_telegram_task.delay(
@@ -40,7 +45,7 @@ def link_post_to_users_task(post_id: int):
 
 
 @app.task
-def send_message_to_telegram_task(*, post_id: int, telegram_chat_id: int, keyword_matches: list[str]):
+def send_message_to_telegram_task(*, post_id: int, telegram_chat_id: int, keyword_matches: list[Keyword]):
     bot_sender = BotSenderService(bot=TeleBot(token=settings.TELEGRAM_BOT_TOKEN))
     post_repository = PostRepository()
 
