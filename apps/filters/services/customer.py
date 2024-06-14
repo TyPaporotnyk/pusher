@@ -17,12 +17,12 @@ class CustomerPostMatchFilter:
         )
 
     def _check_post_by_keyword(self, post: Post) -> bool:
-        group_keywords = self.customer.groups_keywords.all()
-        if not group_keywords:
+        keywords = self.customer.keywords.all()
+        if not keywords:
             return True
 
-        keyword_match = [keyword.name in post.description for keyword in group_keywords]
-        self.keyword_match_result = [item[0] for item in zip(group_keywords, keyword_match) if item[1]]
+        keyword_match = [keyword.name in post.description for keyword in keywords]
+        self.keyword_match_result = [item[0] for item in zip(keywords, keyword_match) if item[1]]
 
         return any(keyword_match)
 

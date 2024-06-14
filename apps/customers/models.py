@@ -23,8 +23,7 @@ class Customer(AbstractBaseUser):
 
     max_pack = models.PositiveIntegerField(default=0)
     groups = models.ManyToManyField(Group, blank=True)
-    groups_keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
-    keywords = models.ManyToManyField(Keyword, blank=True, related_name="keywords")
+    keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
     blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
     matched_posts = models.ManyToManyField(Post, blank=True, related_name="matched_posts")

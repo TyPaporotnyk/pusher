@@ -14,7 +14,6 @@ class CustomerSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "groups",
-            "groups_keywords",
             "keywords",
             "blacklist",
         )

@@ -13,11 +13,6 @@ class CustomerChangeForm(UserChangeForm):
         widget=widgets.FilteredSelectMultiple("Groups", is_stacked=False),
         required=False,
     )
-    groups_keywords = forms.ModelMultipleChoiceField(
-        queryset=Keyword.objects.all(),
-        widget=widgets.FilteredSelectMultiple("GroupKeywords", is_stacked=False),
-        required=False,
-    )
     keywords = forms.ModelMultipleChoiceField(
         queryset=Keyword.objects.all(),
         widget=widgets.FilteredSelectMultiple("Keywords", is_stacked=False),
