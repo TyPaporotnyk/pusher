@@ -15,7 +15,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ["id", "url", "category"]
+        fields = ["id", "url", "category", "is_active"]
 
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class KeywordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Keyword
-        fields = ["id", "name", "category"]
+        fields = ["id", "name", "category", "is_active"]
 
 
 class BlacklistSerializer(serializers.ModelSerializer):
@@ -31,4 +31,4 @@ class BlacklistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blacklist
-        fields = ["id", "name", "category"]
+        fields = ["id", "name", "category", "is_active"]

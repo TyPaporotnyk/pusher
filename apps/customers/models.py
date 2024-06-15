@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
 from apps.base.models import TimedBaseModel
-from apps.common.models import Blacklist, Group, Keyword
 from apps.customers.managers import CustomerManager
 from apps.posts.models import Post
 
@@ -23,9 +22,6 @@ class Customer(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     max_pack = models.PositiveIntegerField(default=0)
-    groups = models.ManyToManyField(Group, blank=True)
-    keywords = models.ManyToManyField(Keyword, blank=True, related_name="groups_keywords")
-    blacklist = models.ManyToManyField(Blacklist, blank=True, related_name="blacklist")
 
     telegram_id = models.BigIntegerField(blank=True, null=True)
 
@@ -55,4 +51,4 @@ class Customer(AbstractBaseUser):
 class CustomerPost(TimedBaseModel):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="matched_posts")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="matched_users")
-    keywords = models.ManyToManyField(Keyword, blank=True, related_name="posts_keywords")
+    keywords = models.ManyToManyField("common.Keyword", blank=True, related_name="posts_keywords")

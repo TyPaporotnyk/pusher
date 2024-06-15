@@ -35,8 +35,8 @@ class CustomerPostMatchFilter:
         return any([group.url == post.group_url for group in groups])
 
     def _check_post_by_blacklist(self, post: Post) -> bool:
-        black_list = self.customer.blacklist.all()
+        black_list = self.customer.black_lists.all()
         if not black_list:
             return False
 
-        return any([bad_keyword.name in post.description for bad_keyword in self.customer.blacklist.all()])
+        return any([bad_keyword.name in post.description for bad_keyword in self.customer.black_lists.all()])

@@ -8,7 +8,6 @@ from apps.base.services.bot import BotSenderService, send_message_to_telegram
 from apps.base.services.files import download_file
 from apps.common.models import Keyword
 from apps.customers.models import CustomerPost
-from apps.customers.repository import CustomerRepository
 from apps.customers.services import CustomerService
 from apps.filters.services.customer import CustomerPostMatchFilter
 from apps.posts.repository import PostRepository
@@ -21,10 +20,9 @@ logger = getLogger(__name__)
 @app.task
 def link_post_to_users_task(post_id: int):
     post_repository = PostRepository()
-    customer_service = CustomerService(customer_repository=CustomerRepository())
 
     post = post_repository.get(id=post_id)
-    customers = customer_service.get_active_customers()
+    customers = CustomerService.get_all_customers()
 
     for customer in customers:
         match_filter = CustomerPostMatchFilter(customer)
@@ -34,7 +32,6 @@ def link_post_to_users_task(post_id: int):
             customer_post.save()
 
             customer_post.keywords.add(*match_filter.keyword_match_result)
-            # customer_post.save()
 
             if customer.telegram_id:
                 send_message_to_telegram_task.delay(

@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from apps.common.serializers import KeywordSerializer
-from apps.customers.models import CustomerPost
 from apps.posts.models import Post, PostImage
 from apps.posts.task import link_post_to_users_task, load_post_images_task
 
@@ -25,21 +23,6 @@ class PostSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_image_urls(obj):
         return [image.image.url for image in obj.images.all() if image.image]
-
-
-class MatchPostSerializer(serializers.ModelSerializer):
-    post = PostSerializer(read_only=True)
-    keywords = KeywordSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = CustomerPost
-        fields = (
-            "id",
-            "post",
-            "keywords",
-            "created_at",
-            "updated_at",
-        )
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
