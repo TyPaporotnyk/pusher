@@ -75,8 +75,8 @@ class CustomerGroupView(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name", "category__name"]
-    search_fields = ["name", "category__name"]
+    filterset_fields = ["name"]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return CustomerService(self.request).get_customer_groups()
