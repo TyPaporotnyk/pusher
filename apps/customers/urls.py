@@ -14,4 +14,5 @@ urlpatterns = [
     # ),
     path("posts/", views.CustomerPostView.as_view({"get": "list"}), name="match-posts"),
     path("posts/<int:pk>/", views.CustomerPostView.as_view({"get": "retrieve"}), name="match-post"),
+    path("telegram/", views.CustomerTelegramView.as_view({"get": "retrieve", "post": "update"}), name="telegram"),
 ]

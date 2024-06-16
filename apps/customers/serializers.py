@@ -55,3 +55,9 @@ class CustomerPostSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
+
+
+class CustomerTelegramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ("telegram_id",)

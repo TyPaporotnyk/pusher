@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from apps.base.pagination import Pagination
 from apps.common.serializers import BlacklistSerializer, GroupSerializer, KeywordSerializer
-from apps.customers.serializers import CustomerPostSerializer, CustomerSerializer
+from apps.customers.serializers import CustomerPostSerializer, CustomerSerializer, CustomerTelegramSerializer
 from apps.customers.services import CustomerService
 
 
@@ -110,3 +110,14 @@ class CustomerPostView(viewsets.ReadOnlyModelViewSet):
                 posts = posts.filter(id__gt=last_post_id)
 
         return posts
+
+
+@extend_schema(tags=["Customer"])
+class CustomerTelegramView(viewsets.ModelViewSet):
+    serializer_class = CustomerTelegramSerializer
+
+    def get_queryset(self):
+        return CustomerService(request=self.request).get_customer()
+
+    def get_object(self):
+        return self.get_queryset()
