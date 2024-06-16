@@ -18,7 +18,7 @@ jobs:
         with:
           switches: --exclude=".git" --exclude=".github" --exclude=".env" --exclude="media" --exclude="staticfiles" -avzr --delete
           path: ./
-          remote_path: ./pusher-backend
+          remote_path: /root/pusher-backend
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_PRIVE_KEY }}
@@ -29,4 +29,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVE_KEY }}
-          script: cd ./pusher-backend && docker-compose down && docker-compose up -d --build
+          script: cd /root/pusher-backend && docker-compose down && docker-compose up -d --build
