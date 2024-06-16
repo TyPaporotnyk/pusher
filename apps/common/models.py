@@ -29,7 +29,7 @@ class Blacklist(TimedBaseModel):
 
 
 class Group(TimedBaseModel):
-    name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Group Name")
+    name = models.CharField(max_length=50, verbose_name="Group Name")
     url = models.URLField(unique=True, verbose_name="Group URL")
     category = models.ForeignKey(
         Category, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Group Category"

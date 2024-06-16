@@ -16,7 +16,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ["id", "url", "category", "is_active"]
+        fields = ["id", "name", "url", "category", "is_active"]
 
     def create(self, validated_data):
         category_name = validated_data.get("category")
