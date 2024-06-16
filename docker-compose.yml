@@ -39,6 +39,13 @@ services:
     depends_on:
       - redis
 
+  flower:
+    extends:
+      service: common
+    command: poetry run celery -A config flower -l INFO
+    depends_on:
+      - redis
+
   redis:
     image: redis:6
     restart: on-failure
