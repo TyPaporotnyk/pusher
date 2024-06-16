@@ -1,11 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
-from rest_framework import filters, generics, viewsets
+from rest_framework import generics, viewsets
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from apps.base.pagination import Pagination
-from apps.common.serializers import BlacklistSerializer, CategorySerializer, GroupSerializer, KeywordSerializer
+from apps.common.serializers import BlacklistSerializer, GroupSerializer, KeywordSerializer
 from apps.customers.serializers import CustomerPostSerializer, CustomerSerializer
 from apps.customers.services import CustomerService
 
@@ -38,7 +38,6 @@ class UpdateCustomerView(generics.UpdateAPIView):
 
         groups_ids = request.data.get("groups", [])
         keyword_ids = request.data.get("keywords", [])
-        # blacklist_ids = request.data.get("black_list", [])
 
         customer_service = CustomerService(self.request)
 
@@ -55,28 +54,8 @@ class UpdateCustomerView(generics.UpdateAPIView):
 
 
 @extend_schema(tags=["Customer"])
-class CustomerCategoryView(viewsets.ModelViewSet):
-    serializer_class = CategorySerializer
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name"]
-    search_fields = ["name"]
-
-    def get_queryset(self):
-        return CustomerService(self.request).get_customer_category()
-
-    def perform_create(self, serializer):
-        customer = CustomerService(self.request).get_customer()
-        serializer.save(customer=customer)
-
-
-@extend_schema(tags=["Customer"])
 class CustomerGroupView(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name"]
-    search_fields = ["name"]
 
     def get_queryset(self):
         return CustomerService(self.request).get_customer_groups()
@@ -90,10 +69,6 @@ class CustomerGroupView(viewsets.ModelViewSet):
 class CustomerKeywordView(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name", "category__name"]
-    search_fields = ["name", "category__name"]
-
     def get_queryset(self):
         return CustomerService(self.request).get_customer_keywords()
 
@@ -105,10 +80,6 @@ class CustomerKeywordView(viewsets.ModelViewSet):
 @extend_schema(tags=["Customer"])
 class CustomerBlackListView(viewsets.ModelViewSet):
     serializer_class = BlacklistSerializer
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["name", "category__name"]
-    search_fields = ["name", "category__name"]
 
     def get_queryset(self):
         return CustomerService(self.request).get_customer_black_list()

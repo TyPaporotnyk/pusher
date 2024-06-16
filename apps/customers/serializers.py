@@ -32,7 +32,6 @@ class CustomerSerializer(serializers.ModelSerializer):
             "email",
             "groups",
             "keywords",
-            # "black_lists",
         )
 
     def to_representation(self, instance):
@@ -40,7 +39,6 @@ class CustomerSerializer(serializers.ModelSerializer):
 
         ret["groups"] = [group.id for group in instance.groups.filter(is_active=True)]
         ret["keywords"] = [keyword.id for keyword in instance.keywords.filter(is_active=True)]
-        ret["black_lists"] = [black_list.id for black_list in instance.black_lists.filter(is_active=True)]
         return ret
 
 
