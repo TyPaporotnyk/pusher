@@ -29,27 +29,30 @@ class Blacklist(TimedBaseModel):
 
 
 class Group(TimedBaseModel):
-    url = models.URLField(unique=True, verbose_name="Group URL")
+    url = models.URLField(verbose_name="Group URL")
     category = models.ForeignKey(
         Category, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Group Category"
     )
     customer = models.ForeignKey(Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="groups")
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["url", "customer"], name="unique_url_customer")]
+
     def __str__(self):
-        if self.name:
-            return f"{self.name} - {self.category}"
-        else:
-            return f"{self.url} - {self.category}"
+        return f"{self.url} - {self.category}"
 
 
 class Keyword(TimedBaseModel):
-    name = models.TextField(verbose_name="Keyword name")
+    name = models.CharField(max_length=255, verbose_name="Keyword name")
     category = models.ForeignKey(
         Category, null=True, blank=True, verbose_name="Keyword category", on_delete=models.CASCADE
     )
     customer = models.ForeignKey(Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="keywords")
     is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["name", "customer"], name="unique_name_customer")]
 
     def __str__(self):
         return self.name
