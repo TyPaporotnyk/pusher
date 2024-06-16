@@ -25,9 +25,7 @@ def link_post_to_users_task(post_id: int):
     customers = CustomerService.get_all_customers()
 
     for customer in customers:
-        match_filter = CustomerPostMatchFilter(customer)
-
-        if match_filter.is_valid(post):
+        if (match_filter := CustomerPostMatchFilter(CustomerService(obj=customer))).is_valid(post):
             customer_post = CustomerPost(customer=customer, post=post)
             customer_post.save()
 

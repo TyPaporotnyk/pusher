@@ -15,7 +15,7 @@ class CustomerView(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def get_queryset(self):
-        return CustomerService(self.request).get_customer()
+        return CustomerService(request=self.request).get_customer()
 
     def get_object(self):
         return self.get_queryset()
@@ -26,7 +26,7 @@ class UpdateCustomerView(generics.UpdateAPIView):
     serializer_class = CustomerSerializer
 
     def get_queryset(self):
-        return CustomerService(self.request).get_customer()
+        return CustomerService(request=self.request).get_customer()
 
     def get_object(self):
         return self.get_queryset()
@@ -39,7 +39,7 @@ class UpdateCustomerView(generics.UpdateAPIView):
         groups_ids = request.data.get("groups", [])
         keyword_ids = request.data.get("keywords", [])
 
-        customer_service = CustomerService(self.request)
+        customer_service = CustomerService(request=self.request)
 
         # Groups
         customer_service.deactivate_customer_groups()
@@ -58,10 +58,10 @@ class CustomerGroupView(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
-        return CustomerService(self.request).get_customer_groups()
+        return CustomerService(request=self.request).get_customer_groups()
 
     def perform_create(self, serializer):
-        customer = CustomerService(self.request).get_customer()
+        customer = CustomerService(request=self.request).get_customer()
         serializer.save(customer=customer)
 
 
@@ -70,10 +70,10 @@ class CustomerKeywordView(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
 
     def get_queryset(self):
-        return CustomerService(self.request).get_customer_keywords()
+        return CustomerService(request=self.request).get_customer_keywords()
 
     def perform_create(self, serializer):
-        customer = CustomerService(self.request).get_customer()
+        customer = CustomerService(request=self.request).get_customer()
         serializer.save(customer=customer)
 
 
@@ -82,10 +82,10 @@ class CustomerBlackListView(viewsets.ModelViewSet):
     serializer_class = BlacklistSerializer
 
     def get_queryset(self):
-        return CustomerService(self.request).get_customer_black_list()
+        return CustomerService(request=self.request).get_customer_black_list()
 
     def perform_create(self, serializer):
-        customer = CustomerService(self.request).get_customer()
+        customer = CustomerService(request=self.request).get_customer()
         serializer.save(customer=customer)
 
 

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from django.db.models import QuerySet
 
@@ -8,8 +9,16 @@ from apps.posts.models import Post
 
 
 class BaseCustomerService(ABC):
-    def __init__(self, request):
-        self.customer = request.user
+    def __init__(
+        self,
+        *,
+        request: Any | None = None,
+        obj: Customer | None = None,
+    ):
+        if obj is None:
+            self.customer = request.user
+        else:
+            self.customer = obj
 
     @staticmethod
     @abstractmethod

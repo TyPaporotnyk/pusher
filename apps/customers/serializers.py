@@ -9,13 +9,13 @@ from apps.posts.serializers import PostSerializer
 class ActiveGroupsKeyRelatedField(serializers.PrimaryKeyRelatedField):
 
     def get_queryset(self):
-        return CustomerService(self.context["request"]).get_customer_groups()
+        return CustomerService(request=self.context["request"]).get_customer_groups()
 
 
 class ActiveKeywordKeyRelatedField(serializers.PrimaryKeyRelatedField):
 
     def get_queryset(self):
-        return CustomerService(self.context["request"]).get_customer_keywords()
+        return CustomerService(request=self.context["request"]).get_customer_keywords()
 
 
 class CustomerSerializer(serializers.ModelSerializer):
