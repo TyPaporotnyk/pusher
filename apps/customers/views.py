@@ -36,18 +36,20 @@ class UpdateCustomerView(generics.UpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        groups_ids = request.data.get("groups", [])
-        keyword_ids = request.data.get("keywords", [])
+        groups_ids = request.data.get("groups")
+        keyword_ids = request.data.get("keywords")
 
         customer_service = CustomerService(request=self.request)
 
         # Groups
-        customer_service.deactivate_customer_groups()
-        customer_service.activate_customer_groups(groups_ids)
+        if groups_ids is not None:
+            customer_service.deactivate_customer_groups()
+            customer_service.activate_customer_groups(groups_ids)
 
         # Keywords
-        customer_service.deactivate_customer_keywords()
-        customer_service.activate_customer_keywords(keyword_ids)
+        if keyword_ids is not None:
+            customer_service.deactivate_customer_keywords()
+            customer_service.activate_customer_keywords(keyword_ids)
 
         self.perform_update(serializer)
         return Response(serializer.data)
