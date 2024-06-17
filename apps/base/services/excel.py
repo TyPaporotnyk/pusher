@@ -19,4 +19,4 @@ def import_group_from_excel(file):
         group_url = row["Group"]
 
         for user in Customer.objects.all():
-            Group.objects.get_or_create(url=group_url, user=user)
+            Group.objects.get_or_create(url=group_url, customer=user)
