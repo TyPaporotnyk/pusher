@@ -5,6 +5,7 @@ from django.urls import include, path
 
 admin.site.site_header = "Pusher Admin"
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("apps.routes")),
