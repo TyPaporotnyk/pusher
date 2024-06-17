@@ -21,9 +21,6 @@ class CustomerPostMatchFilter:
     def _check_post_by_keyword(self, post: Post) -> bool:
         keywords = self.customer_service.get_customer_keywords(active=True)
 
-        if not keywords:
-            return True
-
         keyword_match = [
             bool(re.search(r"\b" + re.escape(keyword.name.lower()) + r"\b", post.description.lower()))
             for keyword in keywords
@@ -34,9 +31,6 @@ class CustomerPostMatchFilter:
 
     def _check_post_by_groups(self, post: Post) -> bool:
         groups = self.customer_service.get_customer_groups(active=True)
-
-        if not groups:
-            return True
 
         return any([group.url == post.group_url for group in groups])
 
