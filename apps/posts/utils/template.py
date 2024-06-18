@@ -28,7 +28,7 @@ def truncate_text(text: str, limit=600) -> str:
 def get_message_text(message: str, post_url: str, keywords: list[Keyword], group_name: str, group_link: str) -> str:
     phone_numbers = find_phone_numbers(message)
     phone_number = phone_numbers[0] if phone_numbers else None
-
+    keywords = [keyword.name for keyword in keywords]
     keywords = list(map(lambda x: x.replace(" ", "_"), keywords))
     message = truncate_text(message, limit=600)
 

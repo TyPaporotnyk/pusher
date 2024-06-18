@@ -6,9 +6,8 @@ from telebot import TeleBot
 from apps.base.exceptions.files import DownloadFileException
 from apps.base.services.bot import BotSenderService, send_message_to_telegram
 from apps.base.services.files import download_file
-from apps.common.models import Keyword
 from apps.customers.models import CustomerPost
-from apps.customers.services import CustomerService
+from apps.customers.services import CustomerPostService, CustomerService
 from apps.filters.services.customer import CustomerPostMatchFilter
 from apps.posts.repository import PostRepository
 from apps.posts.utils.template import get_message_text
@@ -22,7 +21,7 @@ def link_post_to_users_task(post_id: int):
     post_repository = PostRepository()
 
     post = post_repository.get(id=post_id)
-    customers = CustomerService.get_all_customers()
+    customers = CustomerService.get_all()
 
     for customer in customers:
         if (match_filter := CustomerPostMatchFilter(CustomerService(obj=customer))).is_valid(post):
@@ -31,27 +30,37 @@ def link_post_to_users_task(post_id: int):
 
             customer_post.keywords.add(*match_filter.keyword_match_result)
 
+            logger.info(f"Linked post {post} to users {customer} by keywords: {match_filter.keyword_match_result}")
+
             if customer.telegram_id:
                 send_message_to_telegram_task.delay(
-                    post_id=post_id,
-                    telegram_chat_id=customer.telegram_id,
-                    keyword_matches=match_filter.keyword_match_result,
+                    customer_id=customer.id,
+                    customer_post_id=customer_post.id,
                 )
 
 
 @app.task
-def send_message_to_telegram_task(*, post_id: int, telegram_chat_id: int, keyword_matches: list[Keyword]):
+def send_message_to_telegram_task(
+    *,
+    customer_id: int,
+    customer_post_id: int,
+):
     bot_sender = BotSenderService(bot=TeleBot(token=settings.TELEGRAM_BOT_TOKEN))
-    post_repository = PostRepository()
+    customer = CustomerService.get_by_id(customer_id)
+    customer_post_service = CustomerPostService(obj=customer)
 
-    post = post_repository.get(id=post_id)
+    customer_post = customer_post_service.get_by_id(customer_post_id)
+    post = customer_post.post
+    post_keywords = customer_post.keywords.all()
     post_images = post.images.all()
 
     image_urls = [image.original_image_url for image in post_images]
 
-    message_text = get_message_text(post.description, post.url, keyword_matches, post.group_name, post.group_url)
+    message_text = get_message_text(post.description, post.url, post_keywords, post.group_name, post.group_url)
 
-    send_message_to_telegram(bot_sender, telegram_chat_id, message_text, image_urls)
+    send_message_to_telegram(bot_sender, customer.telegram_id, message_text, image_urls)
+
+    logger.info(f"Sent post {post} to user {customer}")
 
 
 @app.task
@@ -65,4 +74,4 @@ def load_post_images_task(*, post_id: int):
         try:
             image.image.save(*download_file(image_url))
         except DownloadFileException:
-            logger.info("Cant download image: %s", image_url)
+            logger.warning(f"Cant download image {image_url} for post {post}")
