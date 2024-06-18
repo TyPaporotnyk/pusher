@@ -19,6 +19,7 @@ logger = getLogger(__name__)
 @app.task
 def link_post_to_users_task(post_id: int):
     post_repository = PostRepository()
+    matched_users = 0
 
     post = post_repository.get(id=post_id)
     customers = CustomerService.get_all()
@@ -29,7 +30,7 @@ def link_post_to_users_task(post_id: int):
             customer_post.save()
 
             customer_post.keywords.add(*match_filter.keyword_match_result)
-
+            matched_users += 1
             logger.info(f"Linked post {post} to users {customer} by keywords: {match_filter.keyword_match_result}")
 
             if customer.telegram_id:
@@ -37,6 +38,8 @@ def link_post_to_users_task(post_id: int):
                     customer_id=customer.id,
                     customer_post_id=customer_post.id,
                 )
+
+    return matched_users
 
 
 @app.task
