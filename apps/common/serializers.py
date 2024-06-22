@@ -19,7 +19,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keyword
-        fields = ["id", "name", "is_active"]
+        fields = ["id", "name", "is_active", "posts_count"]
 
 
 class BlacklistSerializer(serializers.ModelSerializer):

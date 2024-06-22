@@ -51,6 +51,10 @@ class Keyword(TimedBaseModel):
     customer = models.ForeignKey(Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="keywords")
     is_active = models.BooleanField(default=True)
 
+    @property
+    def posts_count(self) -> int:
+        return self.posts_keywords.count()
+
     class Meta:
         constraints = [models.UniqueConstraint(fields=["name", "customer"], name="unique_name_customer")]
 
