@@ -32,13 +32,8 @@ class CustomerService(BaseCustomerService):
     def get_by_id(obj_id: int) -> Customer:
         return get_object_or_404(Customer, pk=obj_id)
 
-    def get_customer_matched_posts(self, ordering: str) -> QuerySet[Post]:
-        return (
-            self.customer.matched_posts.all()
-            .order_by(ordering)
-            .select_related("post")
-            .prefetch_related("keywords", "post__images")
-        )
+    def get_customer_matched_posts(self) -> QuerySet[Post]:
+        return self.customer.matched_posts.all().select_related("post").prefetch_related("keywords", "post__images")
 
     def get_customer(self) -> Customer:
         return self.customer

@@ -1,28 +1,18 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from apps.base.pagination import Pagination
 from apps.common.serializers import BlacklistSerializer, GroupSerializer, KeywordSerializer
+from apps.customers.filters import CustomerPostFilter
 from apps.customers.serializers import CustomerPostSerializer, CustomerSerializer, CustomerTelegramSerializer
 from apps.customers.services import CustomerService
 
 
 @extend_schema(tags=["Customer"])
 class CustomerView(viewsets.ModelViewSet):
-    serializer_class = CustomerSerializer
-
-    def get_queryset(self):
-        return CustomerService(request=self.request).get_customer()
-
-    def get_object(self):
-        return self.get_queryset()
-
-
-@extend_schema(tags=["Customer"])
-class UpdateCustomerView(generics.UpdateAPIView):
     serializer_class = CustomerSerializer
 
     def get_queryset(self):
@@ -92,26 +82,16 @@ class CustomerBlackListView(viewsets.ModelViewSet):
 
 
 @extend_schema(tags=["Customer"])
-class CustomerPostView(viewsets.ReadOnlyModelViewSet):
+class CustomerPostView(viewsets.ModelViewSet):
     serializer_class = CustomerPostSerializer
     pagination_class = Pagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ["created_at"]
+    filterset_class = CustomerPostFilter
     ordering = ["-created_at"]
 
     def get_queryset(self):
-        last_post_id = self.request.query_params.get("last_post_id", None)
-        ordering = self.request.query_params.get("ordering", "-created_at")
-
-        posts = CustomerService(request=self.request).get_customer_matched_posts(ordering=ordering)
-
-        if last_post_id is not None:
-            if "-" in ordering:
-                posts = posts.filter(id__lt=last_post_id)
-            else:
-                posts = posts.filter(id__gt=last_post_id)
-
-        return posts
+        return CustomerService(request=self.request).get_customer_matched_posts()
 
 
 @extend_schema(tags=["Customer"])

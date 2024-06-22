@@ -1,25 +1,15 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework import mixins, viewsets
+from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from apps.base.pagination import Pagination
-from apps.posts.repository import PostRepository
-from apps.posts.serializers import PostCreateSerializer, PostSerializer
+from apps.posts.serializers import PostSerializer
 from apps.posts.services import PostService
 
 
 @extend_schema(tags=["Posts"])
-class PostView(viewsets.ReadOnlyModelViewSet):
+class PostView(viewsets.ModelViewSet):
     serializer_class = PostSerializer
-    pagination_class = Pagination
     permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
-        post_service = PostService(post_repository=PostRepository())
-        return post_service.get_all_posts()
-
-
-@extend_schema(tags=["Posts"])
-class PostCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    serializer_class = PostCreateSerializer
-    permission_classes = (IsAdminUser,)
+        return PostService().get_all()

@@ -4,19 +4,23 @@ from dataclasses import dataclass
 from django.db.models import QuerySet
 
 from apps.posts.models import Post
-from apps.posts.repository import PostRepository
 
 
 @dataclass(frozen=True)
 class BasePostService(ABC):
-    post_repository: PostRepository
 
     @abstractmethod
-    def get_all_posts(self) -> QuerySet[Post]: ...
+    def get_all(self) -> QuerySet[Post]: ...
+
+    @abstractmethod
+    def get_by(self, **filters) -> QuerySet[Post]: ...
 
 
 @dataclass(frozen=True)
 class PostService(BasePostService):
 
-    def get_all_posts(self) -> QuerySet[Post]:
-        return self.post_repository.get_all().prefetch_related("images")
+    def get_all(self) -> QuerySet[Post]:
+        return Post.objects.all().prefetch_related("images")
+
+    def get_by(self, **filters) -> QuerySet[Post]:
+        return Post.objects.filter(**filters).prefetch_related("images")
