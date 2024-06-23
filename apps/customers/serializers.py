@@ -27,7 +27,7 @@ class ActiveBlackListKeyRelatedField(serializers.PrimaryKeyRelatedField):
 class CustomerSerializer(serializers.ModelSerializer):
     groups = ActiveGroupsKeyRelatedField(many=True)
     keywords = ActiveKeywordKeyRelatedField(many=True)
-    black_lists = ActiveKeywordKeyRelatedField(many=True)
+    black_lists = ActiveBlackListKeyRelatedField(many=True)
 
     class Meta:
         model = Customer
