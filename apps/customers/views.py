@@ -8,7 +8,7 @@ from apps.base.pagination import Pagination
 from apps.common.serializers import BlacklistSerializer, GroupSerializer, KeywordSerializer
 from apps.customers.filters import CustomerPostFilter
 from apps.customers.serializers import CustomerPostSerializer, CustomerSerializer, CustomerTelegramSerializer
-from apps.customers.services import CustomerService
+from apps.customers.services.customers import CustomerService
 
 
 @extend_schema(tags=["Customer"])
@@ -16,7 +16,7 @@ class CustomerView(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def get_queryset(self):
-        return CustomerService(request=self.request).get_customer()
+        return CustomerService(customer=self.request.user).customer
 
     def get_object(self):
         return self.get_queryset()
@@ -26,20 +26,19 @@ class CustomerView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        groups_ids = request.data.get("groups")
-        keyword_ids = request.data.get("keywords")
+        customer_service = CustomerService(customer=self.request.user)
 
-        customer_service = CustomerService(request=self.request)
+        if (groups_ids := request.data.get("groups")) is not None:
+            customer_service.group_service.deactivate_all()
+            customer_service.group_service.activate_all_by_ids(groups_ids)
 
-        # Groups
-        if groups_ids is not None:
-            customer_service.deactivate_customer_groups()
-            customer_service.activate_customer_groups(groups_ids)
+        if (keyword_ids := request.data.get("keywords")) is not None:
+            customer_service.keyword_service.deactivate_all()
+            customer_service.keyword_service.activate_all_by_ids(keyword_ids)
 
-        # Keywords
-        if keyword_ids is not None:
-            customer_service.deactivate_customer_keywords()
-            customer_service.activate_customer_keywords(keyword_ids)
+        if (black_lists_ids := request.data.get("black_lists")) is not None:
+            customer_service.black_list_service.deactivate_all()
+            customer_service.black_list_service.activate_all_by_ids(black_lists_ids)
 
         self.perform_update(serializer)
         return Response(serializer.data)
@@ -50,10 +49,10 @@ class CustomerGroupView(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
-        return CustomerService(request=self.request).get_customer_groups()
+        return CustomerService(customer=self.request.user).group_service.get_all()
 
     def perform_create(self, serializer):
-        customer = CustomerService(request=self.request).get_customer()
+        customer = CustomerService(customer=self.request.user).customer
         serializer.save(customer=customer)
 
 
@@ -62,11 +61,7 @@ class CustomerKeywordView(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
 
     def get_queryset(self):
-        return CustomerService(request=self.request).get_customer_keywords()
-
-    def perform_create(self, serializer):
-        customer = CustomerService(request=self.request).get_customer()
-        serializer.save(customer=customer)
+        return CustomerService(customer=self.request.user).keyword_service.get_all()
 
 
 @extend_schema(tags=["Customer"])
