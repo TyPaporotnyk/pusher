@@ -21,7 +21,7 @@ class ActiveKeywordKeyRelatedField(serializers.PrimaryKeyRelatedField):
 class ActiveBlackListKeyRelatedField(serializers.PrimaryKeyRelatedField):
 
     def get_queryset(self):
-        return CustomerService(request=self.context["request"]).get_customer_keywords()
+        return CustomerService(request=self.context["request"]).get_customer_black_list()
 
 
 class CustomerSerializer(serializers.ModelSerializer):
