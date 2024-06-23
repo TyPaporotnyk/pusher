@@ -22,7 +22,7 @@ class CustomerAdmin(UserAdmin):
         (None, {"fields": ("username", "password")}),
         ("Personal Info", {"fields": ("email", "first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_admin", "is_staff", "is_superuser")}),
-        ("Parser settings", {"fields": ("max_pack", "groups", "keywords", "blacklist")}),
+        ("Parser settings", {"fields": ("max_pack", "groups", "keywords", "black_lists")}),
         ("Important datas", {"fields": ("telegram_id", "last_login", "date_joined")}),
     )
     add_fieldsets = (

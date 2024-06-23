@@ -18,27 +18,27 @@ class ActiveKeywordKeyRelatedField(serializers.PrimaryKeyRelatedField):
         return CustomerService(request=self.context["request"]).get_customer_keywords()
 
 
+class ActiveBlackListKeyRelatedField(serializers.PrimaryKeyRelatedField):
+
+    def get_queryset(self):
+        return CustomerService(request=self.context["request"]).get_customer_keywords()
+
+
 class CustomerSerializer(serializers.ModelSerializer):
     groups = ActiveGroupsKeyRelatedField(many=True)
     keywords = ActiveKeywordKeyRelatedField(many=True)
+    black_lists = ActiveKeywordKeyRelatedField(many=True)
 
     class Meta:
         model = Customer
-        fields = (
-            "id",
-            "first_name",
-            "last_name",
-            "username",
-            "email",
-            "groups",
-            "keywords",
-        )
+        fields = ("id", "first_name", "last_name", "username", "email", "groups", "keywords", "black_lists")
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
 
         ret["groups"] = [group.id for group in instance.groups.filter(is_active=True)]
         ret["keywords"] = [keyword.id for keyword in instance.keywords.filter(is_active=True)]
+        ret["black_lists"] = [black_lists.id for black_lists in instance.black_lists.filter(is_active=True)]
         return ret
 
 

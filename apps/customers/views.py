@@ -26,20 +26,19 @@ class CustomerView(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        groups_ids = request.data.get("groups")
-        keyword_ids = request.data.get("keywords")
-
         customer_service = CustomerService(request=self.request)
 
-        # Groups
-        if groups_ids is not None:
+        if (groups_ids := request.data.get("groups")) is not None:
             customer_service.deactivate_customer_groups()
             customer_service.activate_customer_groups(groups_ids)
 
-        # Keywords
-        if keyword_ids is not None:
+        if (keyword_ids := request.data.get("keywords")) is not None:
             customer_service.deactivate_customer_keywords()
             customer_service.activate_customer_keywords(keyword_ids)
+
+        if (black_list_ids := request.data.get("black_lists")) is not None:
+            customer_service.deactivate_customer_black_list()
+            customer_service.activate_customer_black_list(black_list_ids)
 
         self.perform_update(serializer)
         return Response(serializer.data)

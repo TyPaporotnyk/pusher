@@ -23,6 +23,7 @@ pytelegrambotapi = "^4.19.1"
 djoser = "^2.2.3"
 django-cors-headers = "^4.3.1"
 sentry-sdk = {extras = ["django"], version = "^2.5.1"}
+crispy-bootstrap5 = "^2024.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"

@@ -3,5 +3,12 @@
 {% block title %}Success data import{% endblock title %}
 
 {% block content %}
-    <h1>Your data has been imported successfully</h1>
+    <section class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="w-auto card p-4">
+                <h1 class="text-center fs-1 mb-lg-5">Your data has been import successfully</h1>
+                <a href="{% url 'import:groups' %}" class="btn btn-primary">Go back</a>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

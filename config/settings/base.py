@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "djoser",
+    "crispy_forms",
+    "crispy_bootstrap5",
     # first party
     "apps.common",
     "apps.import",
@@ -95,6 +97,9 @@ DATABASES = {
         },
     },
 }
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 # Password validation

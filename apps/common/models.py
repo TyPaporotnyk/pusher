@@ -24,6 +24,9 @@ class Blacklist(TimedBaseModel):
     )
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["name", "customer"], name="unique_black_list_name_customer")]
+
     def __str__(self):
         return self.name
 

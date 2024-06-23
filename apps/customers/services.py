@@ -67,11 +67,18 @@ class CustomerService(BaseCustomerService):
         customer_groups = self.get_customer_groups().filter(is_active=True)
         customer_groups.update(is_active=False)
 
+    def deactivate_customer_black_list(self):
+        customer_black_list = self.get_customer_black_list().filter(is_active=True)
+        customer_black_list.update(is_active=False)
+
     def activate_customer_keywords(self, keyword_ids: list[int]):
         self.get_customer_keywords().filter(id__in=keyword_ids).update(is_active=True)
 
     def activate_customer_groups(self, group_ids: list[int]):
         self.get_customer_groups().filter(id__in=group_ids).update(is_active=True)
+
+    def activate_customer_black_list(self, black_list_ids: list[int]):
+        self.get_customer_black_list().filter(id__in=black_list_ids).update(is_active=True)
 
 
 class CustomerPostService(BaseCustomerService):
