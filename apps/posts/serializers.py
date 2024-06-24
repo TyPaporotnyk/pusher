@@ -26,6 +26,8 @@ class PostSerializer(serializers.ModelSerializer):
         if PostService().get_by(description=value).exists():
             raise serializers.ValidationError("Post with this description already exists.")
 
+        return value
+
     def create(self, validated_data):
         images_data = validated_data.pop("images", [])
         post = Post.objects.create(**validated_data)
