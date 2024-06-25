@@ -6,9 +6,6 @@ from apps.customers.models import Customer
 
 class Category(TimedBaseModel):
     name = models.CharField(max_length=255, verbose_name="Category Name")
-    customer = models.ForeignKey(
-        Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="categories"
-    )
 
     def __str__(self):
         return self.name

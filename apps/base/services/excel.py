@@ -10,9 +10,7 @@ def import_keyword_from_excel(file, is_import_to_all: bool, customer_id: int | N
         keyword_name = row["Keyword"]
         category = row["Category"]
 
-        print(customer_id)
-
-        category = Category.objects.get_or_create(name=category)
+        category, _ = Category.objects.get_or_create(name=category)
 
         if is_import_to_all:
             customers = Customer.objects.all()

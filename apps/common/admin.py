@@ -5,7 +5,7 @@ from apps.common.models import Blacklist, Category, Group, Keyword
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "customer")
+    list_display = ("name",)
     search_fields = ("name",)
 
 
