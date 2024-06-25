@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from apps.base.services.excel import import_group_from_excel, import_keyword_from_excel
+from apps.base.services.excel import import_black_list_from_excel, import_group_from_excel, import_keyword_from_excel
 
 from .forms import ExcelFileUploadForm
 
@@ -42,4 +42,14 @@ def import_groups_view(request):
         import_function=import_group_from_excel,
         excel_columns=["Group", "Category"],
         title="Import groups from excel",
+    )
+
+
+@login_required
+def import_black_list_view(request):
+    return import_base_view(
+        request,
+        import_function=import_black_list_from_excel,
+        excel_columns=["BlackList", "Category"],
+        title="Import Black Lists from excel",
     )

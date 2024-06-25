@@ -1,6 +1,6 @@
 import pandas as pd
 
-from apps.common.models import Category, Group, Keyword
+from apps.common.models import Blacklist, Category, Group, Keyword
 from apps.customers.models import Customer
 
 
@@ -36,6 +36,27 @@ def import_group_from_excel(file, is_import_to_all: bool = True, customer_id: in
 
         else:
             Group.objects.get_or_create(url=group_url, customer_id=customer_id, defaults={"category": category})
+
+
+def import_black_list_from_excel(file, is_import_to_all: bool = True, customer_id: int | None = None):
+    df = pd.read_excel(file)
+    for index, row in df.iterrows():
+        black_list_name = row["BlackList"]
+        category = row["Category"]
+
+        category, _ = Category.objects.get_or_create(name=category)
+
+        if is_import_to_all:
+            customers = Customer.objects.all()
+            for customer in customers:
+                Blacklist.objects.get_or_create(
+                    name=black_list_name, customer=customer, defaults={"category": category}
+                )
+
+        else:
+            Blacklist.objects.get_or_create(
+                name=black_list_name, customer_id=customer_id, defaults={"category": category}
+            )
 
 
 def get_excel_file_not_contains_columns(file, columns: list[str]) -> list[str]:

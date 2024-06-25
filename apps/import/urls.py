@@ -13,4 +13,5 @@ urlpatterns = [
     ),
     path("keywords/", views.import_keywords_view, name="keywords"),
     path("groups/", views.import_groups_view, name="groups"),
+    path("blacklists/", views.import_black_list_view, name="black-lists"),
 ]
