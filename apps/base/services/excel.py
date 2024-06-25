@@ -4,11 +4,13 @@ from apps.common.models import Category, Group, Keyword
 from apps.customers.models import Customer
 
 
-def import_keyword_from_excel(file, is_import_to_all: bool = True, customer_id: int | None = None):
+def import_keyword_from_excel(file, is_import_to_all: bool, customer_id: int | None = None):
     df = pd.read_excel(file)
     for index, row in df.iterrows():
         keyword_name = row["Keyword"]
         category = row["Category"]
+
+        print(customer_id)
 
         category = Category.objects.get_or_create(name=category)
 
@@ -18,7 +20,7 @@ def import_keyword_from_excel(file, is_import_to_all: bool = True, customer_id: 
                 Keyword.objects.get_or_create(name=keyword_name, customer=customer, defaults={"category": category})
 
         else:
-            Group.objects.get_or_create(name=keyword_name, customer_id=customer_id, defaults={"category": category})
+            Keyword.objects.get_or_create(name=keyword_name, customer_id=customer_id, defaults={"category": category})
 
 
 def import_group_from_excel(file, is_import_to_all: bool = True, customer_id: int | None = None):
