@@ -9,7 +9,9 @@ class ExcelFileUploadForm(forms.Form):
     excel_file = forms.FileField(
         label="Select an Excel file", validators=[FileExtensionValidator(allowed_extensions=["xlsx", "xls"])]
     )
-    customer = forms.ModelChoiceField(queryset=Customer.objects.all(), required=False, label="Customer")
+    customer = forms.ModelChoiceField(
+        queryset=Customer.objects.all().order_by("username"), required=False, label="Customer"
+    )
     is_import_to_all = forms.BooleanField(required=False, label="Import to all customers")
 
     def __init__(self, excel_columns: list[str], *args, **kwargs):
