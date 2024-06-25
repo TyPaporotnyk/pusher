@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.posts.models import Post, PostImage
 from apps.posts.services import PostService
-from apps.posts.task import link_post_to_users_task, load_post_images_task
+from apps.posts.task import link_post_to_users_task
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -38,6 +38,5 @@ class PostSerializer(serializers.ModelSerializer):
             post_image.save()
 
         link_post_to_users_task.apply_async(kwargs={"post_id": post.id}, countdown=1)
-        load_post_images_task.apply_async(kwargs={"post_id": post.id}, countdown=1)
 
         return post
