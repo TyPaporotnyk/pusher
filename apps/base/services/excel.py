@@ -27,7 +27,7 @@ def import_group_from_excel(file, is_import_to_all: bool = True, customer_id: in
         group_url = row["Group"]
         category = row["Category"]
 
-        category = Category.objects.get_or_create(name=category)
+        category, _ = Category.objects.get_or_create(name=category)
 
         if is_import_to_all:
             customers = Customer.objects.all()
