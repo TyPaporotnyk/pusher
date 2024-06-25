@@ -7,7 +7,7 @@ from apps.customers.models import Customer
 def import_keyword_from_excel(file, is_import_to_all: bool = True, customer_id: int | None = None):
     df = pd.read_excel(file)
     for index, row in df.iterrows():
-        keyword_name = row["KeyWord"]
+        keyword_name = row["Keyword"]
         category = row["Category"]
 
         category = Category.objects.get_or_create(name=category)
