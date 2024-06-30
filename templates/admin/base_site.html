@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block branding %}
+<div id="branding">
+    <h1 id="site-name">{{ site_header|default:_('Django administration') }}</h1>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<div class="nav-global">
+    <ul style="display: flex; flex-direction: column">
+        <li style="display: inline-block"><a href="{% url 'import:groups' %}">Import Groups</a></li>
+        <li style="display: inline-block"><a href="{% url 'import:keywords' %}">Import Keywords</a></li>
+        <li style="display: inline-block"><a href="{% url 'import:black-lists' %}">Import Black Lists</a></li>
+        <li style="display: inline-block"><a href="{% url 'import:public-groups' %}">Import public Groups</a></li>
+        <li style="display: inline-block"><a href="{% url 'import:public-keywords' %}">Import public Keywords</a></li>
+        <li style="display: inline-block"><a href="{% url 'import:public-black-lists' %}">Import public Black Lists</a></li>
+    </ul>
+</div>
+{% endblock %}

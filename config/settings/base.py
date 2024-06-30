@@ -127,7 +127,7 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "customers.Customer"
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "Europe/Kiev"
 
