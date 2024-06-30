@@ -18,7 +18,7 @@ class BlacklistAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ("url", "category")
+    list_display = ("url", "category", "customer")
     list_filter = ("category",)
     search_fields = ("url", "category__name")
 
