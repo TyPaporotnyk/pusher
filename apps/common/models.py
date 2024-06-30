@@ -60,3 +60,24 @@ class Keyword(TimedBaseModel):
 
     def __str__(self):
         return self.name
+
+
+class PublicGroup(TimedBaseModel):
+    url = models.URLField(verbose_name="Group URL")
+
+    def __str__(self):
+        return self.url
+
+
+class PublicKeyword(TimedBaseModel):
+    name = models.CharField(max_length=255, verbose_name="Public Keyword Name")
+
+    def __str__(self):
+        return self.name
+
+
+class PublicBlackList(TimedBaseModel):
+    name = models.CharField(max_length=255, verbose_name="Public Keyword Name")
+
+    def __str__(self):
+        return self.name

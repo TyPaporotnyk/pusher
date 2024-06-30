@@ -2,13 +2,13 @@ import re
 from dataclasses import dataclass, field
 
 from apps.common.models import Keyword
-from apps.customers.services import BaseCustomerService
+from apps.customers.services import CustomerService
 from apps.posts.models import Post
 
 
 @dataclass
 class CustomerPostMatchFilter:
-    customer_service: BaseCustomerService
+    customer_service: CustomerService
     keyword_match_result: list[Keyword] = field(default_factory=list)
 
     def is_valid(self, post: Post) -> bool:
